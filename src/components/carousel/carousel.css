@@ -1,0 +1,18 @@
+.carousel-image {
+    height: 600px; /* Default height for mobile view */
+    object-fit: cover; /* Prevents image stretching */
+  }
+  
+  @media (min-width: 768px) {
+    .carousel-image {
+      height: auto; /* Automatic height for larger screens */
+      max-height: 400px; /* Set maximum height for desktop */
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .carousel-image {
+      max-height: 500px; /* Adjust height for larger desktop screens */
+    }
+  }
+  
