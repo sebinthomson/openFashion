@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 
-export const OTPInput = ({ length = 4 }) => {
+export const OTPInput = ({ length = 4, setOtpSend }) => {
   const [otp, setOtp] = useState(Array(length).fill(""));
   const inputs = useRef([]);
 
@@ -11,7 +11,7 @@ export const OTPInput = ({ length = 4 }) => {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-
+      setOtpSend(newOtp)
       if (index < length - 1) {
         inputs.current[index + 1].focus();
       }
@@ -29,7 +29,6 @@ export const OTPInput = ({ length = 4 }) => {
       }
     }
   };
-
   return (
     <>
       {otp.map((_, index) => (
@@ -50,7 +49,7 @@ export const OTPInput = ({ length = 4 }) => {
             border: "1px solid #ccc",
             backgroundColor: "transparent",
             padding: "0",
-            boxSizing:"border-box"
+            boxSizing: "border-box",
           }}
           className="text-white"
         />

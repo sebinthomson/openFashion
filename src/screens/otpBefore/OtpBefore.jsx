@@ -3,11 +3,24 @@ import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import { OTPInput } from "../../components/otpInput/OtpInput";
+import { useState } from "react";
 
 function OtpBefore() {
   const navigate = useNavigate();
+  const [otp, setOtp] = useState(Array(length).fill(""));
+  const [err, setErr] = useState({ otpError: "" });
+
   const handleSubmit = () => {
-    navigate("/img-upload");
+    let check = false;
+    if (otp.length == 0) check = true;
+    Object.values(otp).map((n) => {
+      if (!n.length) {
+        check = true;
+      }
+    });
+    check
+      ? setErr({ otpError: "Please enter valid otp" })
+      : navigate("/img-upload");
   };
   return (
     <div className="row full-height">
@@ -23,10 +36,20 @@ function OtpBefore() {
           </h6>
         </div>
         <div className="ps-2 d-flex">
-          <OTPInput length={4} />
+          <OTPInput length={4} setOtpSend={setOtp} />
         </div>
-        <div className="py-3">
-          <button className="bg-white py-3 px-5 text-black border  poppins-light rounded-0" onClick={handleSubmit}>
+        {err.otpError.length ? (
+          <div className="ps-3 d-flex">
+            <div className="text-danger">{err.otpError}</div>
+          </div>
+        ) : (
+          ""
+        )}
+        <div className="pb-3 pt-5">
+          <button
+            className="bg-white py-3 px-5 text-black border  poppins-light rounded-0"
+            onClick={handleSubmit}
+          >
             Submit
           </button>
         </div>

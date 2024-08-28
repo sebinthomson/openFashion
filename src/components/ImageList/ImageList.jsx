@@ -1,6 +1,6 @@
 import { itemData } from "../../../public/gallery";
 import "./imageList.css";
-import * as React from "react";
+import { useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -8,18 +8,37 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 
-function srcset(image, width, height, rows = 1, cols = 1) {
+function srcset(image, size) {
   return {
-    src: `${image}?w=${width * cols}&h=${height * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${width * cols}&h=${
-      height * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
+    src: `${image}?w=${size}&h=${size}&fit=crop&auto=format`,
+    srcSet: `${image}?w=${size}&h=${size}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
 
 export default function CustomImageList() {
+  const theme = useTheme();
+
+  const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between("md", "lg"));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+
+  let cols;
+  let height = "";
+  if (isExtraSmallScreen) {
+    cols = 2;
+  } else if (isSmallScreen) {
+    cols = 3;
+  } else if (isMediumScreen) {
+    cols = 4;
+  } else if (isLargeScreen) {
+    cols = 6;
+    height = "auto";
+  }
+
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
 
@@ -32,14 +51,15 @@ export default function CustomImageList() {
 
   return (
     <>
-      <div className="image-list-container">
-        <ImageList rowHeight={200} gap={14}>
+      <div className="image-list-container" style={{ height: height }}>
+        <ImageList rowHeight={200} gap={14} cols={cols}>
           {itemData.map((item) => (
             <ImageListItem key={item.img}>
               <img
-                {...srcset(item.img, 200, 200)}
+                {...srcset(item.img, 200)}
                 alt={item.title}
                 loading="lazy"
+                style={{ objectFit: "cover", width: "100%", height: "100%" }}
                 onClick={() => handleOpen(item.img)}
               />
               <ImageListItemBar

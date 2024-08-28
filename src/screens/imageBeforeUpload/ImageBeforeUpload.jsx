@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 function ImageBeforeUpload() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [img, setImg] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(""); // State for error message
+  const modalRef = useRef(null); // Ref for the modal
+
   const [tAndC] = useState([
     "Lorem ipsum dolor sit amet consectetur.",
     "Lorem ipsum dolor sit amet consectetur.",
@@ -26,8 +30,25 @@ function ImageBeforeUpload() {
 
     if (fileInput.files.length > 0) {
       fileLabel.textContent = fileInput.files[0].name;
+      setImg(true);
+      setErrorMessage(""); // Clear error message when a file is selected
     } else {
       fileLabel.textContent = "Attach your file here";
+      setImg(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    if (!img) {
+      setErrorMessage("Please upload an image before submitting."); // Set error message if no image
+    } else {
+      // Perform the action if an image is uploaded
+      // Open modal programmatically using the ref
+      setErrorMessage(""); // Clear any existing error messages
+      if (modalRef.current) {
+        const modal = new window.bootstrap.Modal(modalRef.current);
+        modal.show();
+      }
     }
   };
 
@@ -56,19 +77,22 @@ function ImageBeforeUpload() {
                   type="file"
                   id="fileInput"
                   className="file-input d-none"
+                  accept=".png, .jpg, .jpeg"
                   onChange={updateFileName}
                 />
                 <span id="fileLabel">Attach your file here</span>
               </label>
             </div>
-            <div className="py-3">
+            {errorMessage && (
+              <div className="text-danger mt-2">{errorMessage}</div>
+            )}
+            <div className="pb-3 pt-5">
               <button
                 className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
                 type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
+                onClick={handleSubmit}
               >
-                Submit
+                {img ? "Search Images" : "Submit"}
               </button>
             </div>
           </>
@@ -96,59 +120,60 @@ function ImageBeforeUpload() {
         )}
       </div>
       <div
-  className="modal fade"
-  id="staticBackdrop"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabIndex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div className="modal-dialog modal-dialog-centered modal-lg"> {/* Adjusted width to 'modal-lg' */}
-    <div className="modal-content bg-white rounded-0 modal-properties">
-      <div className="modal-header justify-content-center">
-        <h1
-          className="modal-title fs-3 miama-font text-nowrap"
-          id="staticBackdropLabel"
-        >
-          Terms & Conditions
-        </h1>
+        className="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+        ref={modalRef} // Add ref to modal
+      >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content bg-white rounded-0 modal-properties">
+            <div className="modal-header justify-content-center">
+              <h1
+                className="modal-title fs-3 miama-font text-nowrap"
+                id="staticBackdropLabel"
+              >
+                Terms & Conditions
+              </h1>
+            </div>
+            <div className="modal-body fixed-height">
+              <ol className="list-group list-group-numbered">
+                {tAndC.map((item, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item fs-6 poppins-light px-2 lh-base border-0"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="modal-footer text-center justify-content-center d-flex row mx-3">
+              <button
+                className="py-2 poppins-light border-1 bg-black text-white"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  setLoading(true);
+                  setTimeout(() => {
+                    navigate("/gallery");
+                  }, 4000);
+                }}
+              >
+                Accept
+              </button>
+              <button
+                className="py-2 poppins-light border-1 bg-white"
+                data-bs-dismiss="modal"
+              >
+                Decline
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="modal-body fixed-height">
-        <ol className="list-group list-group-numbered">
-          {tAndC.map((item, index) => (
-            <li
-              key={index}
-              className="list-group-item fs-6 poppins-light px-2 lh-base border-0"
-            >
-              {item}
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className="modal-footer text-center justify-content-center d-flex row mx-3">
-        <button
-          className="py-2 poppins-light border-1 bg-black text-white"
-          data-bs-dismiss="modal"
-          onClick={() => {
-            setLoading(true);
-            setTimeout(() => {
-              navigate("/gallery");
-            }, 4000);
-          }}
-        >
-          Accept
-        </button>
-        <button
-          className="py-2 poppins-light border-1 bg-white"
-          data-bs-dismiss="modal"
-        >
-          Decline
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 
       <Footer />
     </div>

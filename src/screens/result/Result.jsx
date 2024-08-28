@@ -29,12 +29,12 @@ function Result() {
             </select>
           </div>
         </div>
-        <div className="pt-4">
+        <div className="pt-4 height-auto">
           <CustomImageList />
         </div>
         <div className="py-3 d-flex justify-content-center">
           <button
-            className="bg-white  px-5 py-2 text-black border  poppins-light rounded-0"
+            className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
             onClick={handleDownload}
           >
             Download
@@ -85,7 +85,7 @@ function Result() {
                 </svg>
               </div>
               <div>
-                <h3 className="text-black miama-font fs-4">
+                <h3 className="text-center text-black miama-font fs-4">
                   Download Successful
                 </h3>
               </div>

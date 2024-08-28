@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import './carousel.css'; // Import the CSS file
+import "./carousel.css"; // Ensure this file contains the necessary styles for custom positioning
 
 function Carousel() {
   const images = [
@@ -10,9 +10,7 @@ function Carousel() {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      // Bootstrap carousel automatically handles image switching
-    }, 2000);
+    const interval = setInterval(() => {}, 2000);
 
     return () => clearInterval(interval);
   }, []);
@@ -20,7 +18,7 @@ function Carousel() {
   return (
     <div
       id="carouselExampleInterval"
-      className="carousel slide"
+      className="carousel slide bg-black"
       data-bs-ride="carousel"
       style={{ margin: 0, padding: 0 }}
     >
@@ -28,7 +26,7 @@ function Carousel() {
         {images.map((src, index) => (
           <div
             key={index}
-            className={`carousel-item w-100 ${index === 0 ? "active" : ""}`}
+            className={`carousel-item ${index === 0 ? "active" : ""}`}
             data-bs-interval="2000"
           >
             <img
@@ -39,22 +37,24 @@ function Carousel() {
           </div>
         ))}
       </div>
-      <button
-        className="carousel-control-prev"
-        type="button"
-        data-bs-target="#carouselExampleInterval"
-        data-bs-slide="prev"
-      >
-        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-      </button>
-      <button
-        className="carousel-control-next"
-        type="button"
-        data-bs-target="#carouselExampleInterval"
-        data-bs-slide="next"
-      >
-        <span className="carousel-control-next-icon" aria-hidden="true"></span>
-      </button>
+      <div className="d-flex justify-content-center">
+        <button
+          className="custom-control-prev me-5"
+          type="button"
+          data-bs-target="#carouselExampleInterval"
+          data-bs-slide="prev"
+        >
+          <span className="bi bi-arrow-left-circle custom-icon"></span>
+        </button>
+        <button
+          className="custom-control-next ms-5"
+          type="button"
+          data-bs-target="#carouselExampleInterval"
+          data-bs-slide="next"
+        >
+          <span className="bi bi-arrow-right-circle custom-icon"></span>
+        </button>
+      </div>
     </div>
   );
 }

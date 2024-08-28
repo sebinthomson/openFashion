@@ -413,3 +413,15 @@ body,
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
+
+/* Hide number input arrows for Chrome, Safari, Edge, and Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number input arrows for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
