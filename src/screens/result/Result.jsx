@@ -1,18 +1,23 @@
+import { useState } from "react";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
+import SignInButton from "../../otpService/OtpService";
 
 function Result() {
+  const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const handleDownload = () => {
     const modalElement = document.getElementById("staticBackdrop");
     const modal = new Modal(modalElement);
     modal.show();
   };
+
   return (
-    <div className="row full-height">
+    <div className="row full-height" id="belowroot">
       <Navbar />
+      <SignInButton />
       <div
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
         style={{ maxWidth: "100vw" }}
@@ -30,15 +35,20 @@ function Result() {
           </div>
         </div>
         <div className="pt-4 height-auto">
-          <CustomImageList />
+          <CustomImageList
+            setSelectedImagesIndex={setSelectedImagesIndex}
+            selectedImagesIndex={selectedImagesIndex}
+          />
         </div>
         <div className="py-3 d-flex justify-content-center">
-          <button
-            className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
-            onClick={handleDownload}
-          >
-            Download
-          </button>
+          {selectedImagesIndex.length != 0 && (
+            <button
+              className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
+              onClick={handleDownload}
+            >
+              Download
+            </button>
+          )}
         </div>
       </div>
       <div

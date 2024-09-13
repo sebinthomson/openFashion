@@ -20,10 +20,11 @@ function OtpBefore() {
     });
     check
       ? setErr({ otpError: "Please enter valid otp" })
-      : navigate("/img-upload");
+      : (navigate("/img-upload"), console.log("first"));
   };
+
   return (
-    <div className="row full-height">
+    <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back />

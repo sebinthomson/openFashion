@@ -3,6 +3,7 @@ import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { useNavigate } from "react-router-dom";
+import { config_termsconditions } from "../../../config";
 
 function ImageBeforeUpload() {
   const navigate = useNavigate();
@@ -11,18 +12,7 @@ function ImageBeforeUpload() {
   const [errorMessage, setErrorMessage] = useState(""); // State for error message
   const modalRef = useRef(null); // Ref for the modal
 
-  const [tAndC] = useState([
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-    "Lorem ipsum dolor sit amet consectetur.",
-  ]);
+  const [tAndC] = useState(config_termsconditions);
 
   const updateFileName = () => {
     const fileInput = document.getElementById("fileInput");
@@ -53,7 +43,7 @@ function ImageBeforeUpload() {
   };
 
   return (
-    <div className="row full-height">
+    <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back prevCount={-2} />
@@ -116,6 +106,7 @@ function ImageBeforeUpload() {
                 <div id="square5"></div>
               </div>
             </div>
+            <div className="bg-black" style={{ height: "45px" }}></div>
           </>
         )}
       </div>
@@ -175,7 +166,7 @@ function ImageBeforeUpload() {
         </div>
       </div>
 
-      <Footer />
+      <Footer value={loading} />
     </div>
   );
 }

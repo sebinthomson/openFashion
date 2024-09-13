@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+import axios from "axios";
 
 function srcset(image, size) {
   return {
@@ -17,8 +18,12 @@ function srcset(image, size) {
     srcSet: `${image}?w=${size}&h=${size}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-export default function CustomImageList() {
+export default function CustomImageList({
+  selectedImagesIndex,
+  setSelectedImagesIndex,
+}) {
   const theme = useTheme();
 
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,11 +54,33 @@ export default function CustomImageList() {
 
   const handleClose = () => setOpen(false);
 
+  const handleSelectImage = (i) => {
+    setSelectedImagesIndex((prev) => {
+      let newSelectedImages = [...prev];
+      const indexOfI = newSelectedImages.indexOf(i);
+      if (indexOfI !== -1) {
+        newSelectedImages.splice(indexOfI, 1);
+      } else {
+        newSelectedImages.push(i);
+      }
+      return newSelectedImages;
+    });
+  };
+
+  const fetchImages = async () => {
+    console.log("fetchImages api")
+    const res = await axios.get(
+      `${baseURL}/detected-faces?mobile_number=${"8089543963"}`
+    );
+    console.log(res);
+  };
+  fetchImages();
+
   return (
     <>
       <div className="image-list-container" style={{ height: height }}>
         <ImageList rowHeight={200} gap={14} cols={cols}>
-          {itemData.map((item) => (
+          {itemData.map((item, i) => (
             <ImageListItem key={item.img}>
               <img
                 {...srcset(item.img, 200)}
@@ -70,7 +97,13 @@ export default function CustomImageList() {
                 }}
                 position="top"
                 actionIcon={
-                  <input className="custom-checkbox m-2" type="checkbox" />
+                  <input
+                    className="custom-checkbox m-2"
+                    type="checkbox"
+                    onChange={() => {
+                      handleSelectImage(i);
+                    }}
+                  />
                 }
                 actionPosition="left"
               />

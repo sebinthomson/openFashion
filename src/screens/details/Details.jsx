@@ -1,16 +1,25 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function Details() {
-  const [fname, setFName] = useState("");
-  const [lname, setLName] = useState("");
-  const [phnNoCC, setPhnNoCC] = useState("+91");
-  const [phnNo, setPhnNo] = useState("");
-  const [email, setEmail] = useState("");
+  const {
+    fname,
+    lname,
+    phnNoCC,
+    phnNo,
+    email,
+    setFName,
+    setLName,
+    setPhnNoCC,
+    setPhnNo,
+    setEmail,
+  } = useContext(DetailsContext);
+
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -41,8 +50,12 @@ function Details() {
 
     if (key === "phnNo") {
       setPhnNo(value);
-      if (value.length < 10) {
-        setErrors((prev) => ({ ...prev, phnNo: "Phone Number is required" }));
+      if (value.length == 0) {
+        setErrors((prev) => ({ ...prev, phnNo: "Phone number is required" }));
+      } else if (value.length < 10) {
+        setErrors((prev) => ({ ...prev, phnNo: "Phone number is too short" }));
+      } else if (value.length > 10) {
+        setErrors((prev) => ({ ...prev, phnNo: "Phone number is too long" }));
       } else {
         setErrors((prev) => ({ ...prev, phnNo: "" }));
       }
@@ -69,8 +82,13 @@ function Details() {
     const newErrors = {};
     if (!fname) newErrors.fName = "First name is required";
     if (!lname) newErrors.lName = "Last name is required";
-    if (phnNo.length < 10) newErrors.phnNo = "Phone number is too short";
-    if (phnNoCC.length < 12) newErrors.phnNoCC = "Phone number is too short";
+    if (phnNo.length == 0) {
+      newErrors.phnNo = "Phone number is required";
+    } else if (phnNo.length < 10) {
+      newErrors.phnNo = "Phone number is too short";
+    } else if (phnNo.length > 10) {
+      newErrors.phnNo = "Phone number is too long";
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) newErrors.email = "Invalid email address";
 
@@ -78,7 +96,7 @@ function Details() {
     return Object.keys(newErrors).length === 0;
   };
   return (
-    <div className="row full-height">
+    <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back />

@@ -1,25 +1,39 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 function Footer() {
+  const [balanceHeight, setBalanceHeight] = useState(0);
+  const balanceRef = useRef(0);
+  useEffect(() => {
+    const divElement = document.getElementById("belowroot");
+    if (divElement) {
+      const rect = divElement.getBoundingClientRect();
+      const divHeight = rect.height;
+      const screenHeight = window.innerHeight;
+      balanceRef.current = screenHeight - divHeight ;
+      setBalanceHeight(balanceRef.current);
+    }
+  },[]);
+  
   return (
     <>
-      <div className="row w-100 bg-dark pt-4 m-0">
+      <div className="bg-black " style={{ height: balanceHeight }}></div>
+      <div className="footer-content row w-100 bg-dark pt-4 m-0">
         <div>
           <div>
             <h3 className="text-white miama-font">Get In Tuch With US!</h3>
           </div>
           <div>
-            <h3 className="text-white poppins-extralight fs-5 pt-3">
+            <h3 className="text-white poppins-extralight fs-6 pt-3">
               www.openFashion.com
             </h3>
           </div>
           <div>
-            <h3 className="text-white poppins-extralight fs-5 pt-2">
+            <h3 className="text-white poppins-extralight fs-6 pt-2">
               openFashion@gmail.com
             </h3>
           </div>
           <div>
-            <h3 className="text-white poppins-extralight fs-5 pt-2">
+            <h3 className="text-white poppins-extralight fs-6 pt-2">
               91+ 9482 9484 90
             </h3>
           </div>
@@ -66,7 +80,7 @@ function Footer() {
           <h3 className="text-white pt-2 powered-by">Powered By OpenFashion</h3>
         </div>
       </div>
-      <div className="row w-100 bg-black ps-4 py-3 m-0">
+      <div className="row w-100 bg-black ps-4 py-2 m-0 copyright-div">
         <h6 className="text-white copyright-font text-center">
           Copyright © openFashion All Rights Reserved.
         </h6>
