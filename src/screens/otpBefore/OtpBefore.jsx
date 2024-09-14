@@ -20,7 +20,7 @@ function OtpBefore() {
     });
     check
       ? setErr({ otpError: "Please enter valid otp" })
-      : (navigate("/img-upload"), console.log("first"));
+      : navigate("/img-upload");
   };
 
   return (

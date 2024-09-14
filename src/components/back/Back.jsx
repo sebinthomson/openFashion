@@ -1,10 +1,21 @@
 import { useNavigate } from "react-router-dom";
 
-function Back({ prevCount }) {
+function Back({ page }) {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(prevCount == undefined ? -1 : prevCount);
+    switch (page) {
+      case "gallery":
+        localStorage.removeItem("mNumber");
+        navigate("/register");
+        break;
+      case "register":
+        navigate("/");
+        break;
+      case "img-upload":
+        navigate("/register");
+        break;
+    }
   };
   return (
     <div className="d-flex flex-row align-items-center ">

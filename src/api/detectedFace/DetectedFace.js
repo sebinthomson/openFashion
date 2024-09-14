@@ -1,19 +1,16 @@
- import Axios from "../axios/Axios.js"
+import axios from "axios";
 
-export async function DetectedFaceApi(mNumber) {
+export default async function DetectedFaceApi(mNumber) {
   try {
-    var topNDetails = {
-      method: "get",
-      url: `/api/detected-faces?mobile_number=${encodeURIComponent(mNumber)}`,
-      headers: {
-        "Content-Type": "application/json",
+    const res = await axios.get("/api/detected-faces", {
+      params: {
+        mobile_number: mNumber,
       },
-    };
+      headers: { "Content-Type": "application/json" },
+    });
 
-    const detectedFaceResponse = await Axios(topNDetails);
-
-    console.log(detectedFaceResponse);
+    return res.data;
   } catch (error) {
-    console.error(error);
+    console.error("detected-faces api error", error);
   }
 }

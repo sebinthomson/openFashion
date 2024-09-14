@@ -1,16 +1,19 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
+import UploadApi from "../../api/upload/Upload";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function ImageBeforeUpload() {
+  const { fname, lname, phnNo, email } = useContext(DetailsContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // State for error message
-  const modalRef = useRef(null); // Ref for the modal
+  const [errorMessage, setErrorMessage] = useState("");
+  const modalRef = useRef(null);
 
   const [tAndC] = useState(config_termsconditions);
 
@@ -19,22 +22,21 @@ function ImageBeforeUpload() {
     const fileLabel = document.getElementById("fileLabel");
 
     if (fileInput.files.length > 0) {
-      fileLabel.textContent = fileInput.files[0].name;
-      setImg(true);
-      setErrorMessage(""); // Clear error message when a file is selected
+      const file = fileInput.files[0];
+      fileLabel.textContent = file.name;
+      setImg(file);
+      setErrorMessage("");
     } else {
       fileLabel.textContent = "Attach your file here";
-      setImg(false);
+      setImg(null);
     }
   };
 
   const handleSubmit = () => {
     if (!img) {
-      setErrorMessage("Please upload an image before submitting."); // Set error message if no image
+      setErrorMessage("Please upload an image before submitting.");
     } else {
-      // Perform the action if an image is uploaded
-      // Open modal programmatically using the ref
-      setErrorMessage(""); // Clear any existing error messages
+      setErrorMessage("");
       if (modalRef.current) {
         const modal = new window.bootstrap.Modal(modalRef.current);
         modal.show();
@@ -42,11 +44,35 @@ function ImageBeforeUpload() {
     }
   };
 
+  const handleAccept = async () => {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("firstName", fname);
+      formData.append("lastName", lname);
+      formData.append("mobileNumber", phnNo);
+      formData.append("email", email);
+      formData.append("imageFile", img);
+
+      const res = await UploadApi(formData);
+      if (res?.error) {
+        console.log(res.error);
+      } else {
+        localStorage.setItem("mNumber", phnNo);
+        navigate("/gallery");
+      }
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back prevCount={-2} />
+        <Back page={"img-upload"} />
         {!loading ? (
           <>
             <div className="pt-4">
@@ -67,7 +93,7 @@ function ImageBeforeUpload() {
                   type="file"
                   id="fileInput"
                   className="file-input d-none"
-                  accept=".png, .jpg, .jpeg"
+                  accept=".jpg, .jpeg"
                   onChange={updateFileName}
                 />
                 <span id="fileLabel">Attach your file here</span>
@@ -147,10 +173,7 @@ function ImageBeforeUpload() {
                 className="py-2 poppins-light border-1 bg-black text-white"
                 data-bs-dismiss="modal"
                 onClick={() => {
-                  setLoading(true);
-                  setTimeout(() => {
-                    navigate("/gallery");
-                  }, 4000);
+                  handleAccept();
                 }}
               >
                 Accept

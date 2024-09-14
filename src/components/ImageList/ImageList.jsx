@@ -1,6 +1,5 @@
-import { itemData } from "../../../public/gallery";
 import "./imageList.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -10,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import axios from "axios";
+import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
 
 function srcset(image, size) {
   return {
@@ -18,11 +17,12 @@ function srcset(image, size) {
     srcSet: `${image}?w=${size}&h=${size}&fit=crop&auto=format&dpr=2 2x`,
   };
 }
-const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 export default function CustomImageList({
   selectedImagesIndex,
   setSelectedImagesIndex,
+  detectedImages,
+  setDetectedImages,
 }) {
   const theme = useTheme();
 
@@ -56,59 +56,66 @@ export default function CustomImageList({
 
   const handleSelectImage = (i) => {
     setSelectedImagesIndex((prev) => {
+      let imageUrl = detectedImages[i]?.image_url;
       let newSelectedImages = [...prev];
-      const indexOfI = newSelectedImages.indexOf(i);
+      const indexOfI = newSelectedImages.indexOf(imageUrl);
       if (indexOfI !== -1) {
         newSelectedImages.splice(indexOfI, 1);
       } else {
-        newSelectedImages.push(i);
+        newSelectedImages.push(imageUrl);
       }
       return newSelectedImages;
     });
   };
 
   const fetchImages = async () => {
-    console.log("fetchImages api")
-    const res = await axios.get(
-      `${baseURL}/detected-faces?mobile_number=${"8089543963"}`
-    );
-    console.log(res);
+    const res = await DetectedFaceApi("8089543963");
+    setDetectedImages(res);
   };
-  fetchImages();
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   return (
     <>
       <div className="image-list-container" style={{ height: height }}>
         <ImageList rowHeight={200} gap={14} cols={cols}>
-          {itemData.map((item, i) => (
-            <ImageListItem key={item.img}>
-              <img
-                {...srcset(item.img, 200)}
-                alt={item.title}
-                loading="lazy"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                onClick={() => handleOpen(item.img)}
-              />
-              <ImageListItemBar
-                sx={{
-                  background:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                    "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                }}
-                position="top"
-                actionIcon={
-                  <input
-                    className="custom-checkbox m-2"
-                    type="checkbox"
-                    onChange={() => {
-                      handleSelectImage(i);
+          {Array.isArray(detectedImages) &&
+            detectedImages.map((item, i) => {
+              return (
+                <ImageListItem key={item.image_url}>
+                  <img
+                    {...srcset(item.image_url, 200)}
+                    alt={item.title}
+                    loading="lazy"
+                    style={{
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
                     }}
+                    onClick={() => handleOpen(item.image_url)}
                   />
-                }
-                actionPosition="left"
-              />
-            </ImageListItem>
-          ))}
+                  <ImageListItemBar
+                    sx={{
+                      background:
+                        "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+                        "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                    }}
+                    position="top"
+                    actionIcon={
+                      <input
+                        className="custom-checkbox m-2"
+                        type="checkbox"
+                        onChange={() => {
+                          handleSelectImage(i);
+                        }}
+                      />
+                    }
+                    actionPosition="left"
+                  />
+                </ImageListItem>
+              );
+            })}
         </ImageList>
       </div>
 

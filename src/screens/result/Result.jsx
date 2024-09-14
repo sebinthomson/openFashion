@@ -4,25 +4,45 @@ import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
-import SignInButton from "../../otpService/OtpService";
+import axios from "axios";
 
 function Result() {
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
-  const handleDownload = () => {
-    const modalElement = document.getElementById("staticBackdrop");
-    const modal = new Modal(modalElement);
-    modal.show();
+  const [detectedImages, setDetectedImages] = useState([]);
+
+  const handleDownload = async () => {
+    try {
+      selectedImagesIndex?.map(async (imageUrl, index) => {
+        const response = await axios.get(imageUrl, {
+          responseType: "blob",
+        });
+        const imageBlob = new Blob([response.data]);
+        const tempUrl = window.URL.createObjectURL(imageBlob);
+        const link = document.createElement("a");
+        link.href = tempUrl;
+        link.setAttribute("download", `image_${index + 1}.jpg`);
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(tempUrl);
+        link.remove();
+
+        const modalElement = document.getElementById("staticBackdrop");
+        const modal = new Modal(modalElement);
+        modal.show();
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
-      <SignInButton />
       <div
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
         style={{ maxWidth: "100vw" }}
       >
-        <Back />
+        <Back page={"gallery"} />
         <div className="pt-4 d-flex justify-content-between ">
           <div>
             <h3 className="text-white miama-font fs-1">Your result</h3>
@@ -36,8 +56,10 @@ function Result() {
         </div>
         <div className="pt-4 height-auto">
           <CustomImageList
-            setSelectedImagesIndex={setSelectedImagesIndex}
             selectedImagesIndex={selectedImagesIndex}
+            detectedImages={detectedImages}
+            setSelectedImagesIndex={setSelectedImagesIndex}
+            setDetectedImages={setDetectedImages}
           />
         </div>
         <div className="py-3 d-flex justify-content-center">

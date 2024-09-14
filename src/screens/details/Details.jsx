@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
+import SignInButton from "../../otpService/OtpService";
 
 function Details() {
   const {
@@ -21,7 +21,6 @@ function Details() {
   } = useContext(DetailsContext);
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const handleSelect = (code) => {
     setPhnNoCC(code);
@@ -74,7 +73,17 @@ function Details() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      navigate("/verify");
+      const otpButtonDiv = document.getElementById("otp_button");
+      if (otpButtonDiv) {
+        const otpButton = otpButtonDiv.querySelector("button");
+        if (otpButton) {
+          otpButton.click();
+        } else {
+          console.log("Button element inside otp_button not found");
+        }
+      } else {
+        console.log("otpButton element not found");
+      }
     }
   };
 
@@ -95,11 +104,12 @@ function Details() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back />
+        <Back page={'register'}/>
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Fill the details</h3>
         </div>
@@ -194,6 +204,7 @@ function Details() {
           </button>
         </div>
       </div>
+      <SignInButton />
       <Footer />
     </div>
   );

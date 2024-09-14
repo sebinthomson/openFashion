@@ -1,28 +1,15 @@
-import Axios from "../axios/AxiosGo";
+import axios from "axios";
 
-export async function uploadApi(fName, lName, email, mNumber, imageFile) {
+export default async function UploadApi(formData) {
   try {
-    const data = JSON.stringify({
-      firstName: fName,
-      lastName: lName,
-      email: email,
-      mobileNumber: mNumber,
-      imageFile: imageFile,
-    });
-
-    var topNDetails = {
-      method: "post",
-      url: "upload",
+    const res = await axios.post("/api/upload", formData, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
       },
-      data: data,
-    };
-
-    const uploadResponse = await Axios(topNDetails);
-
-    console.log(uploadResponse);
+    });
+    return res;
   } catch (error) {
-    console.error(error);
+    console.error("detected-faces api error", error);
+    return error.response.data;
   }
 }
