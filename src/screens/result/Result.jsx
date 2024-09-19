@@ -5,6 +5,7 @@ import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import { saveAs } from "file-saver";
 
 function Result() {
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
@@ -16,6 +17,7 @@ function Result() {
         const response = await axios.get(imageUrl, {
           responseType: "blob",
         });
+
         const imageBlob = new Blob([response.data]);
         const tempUrl = window.URL.createObjectURL(imageBlob);
         const link = document.createElement("a");
@@ -34,7 +36,6 @@ function Result() {
       console.error(error);
     }
   };
-
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />

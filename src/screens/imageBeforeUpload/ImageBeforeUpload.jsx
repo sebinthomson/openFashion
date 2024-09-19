@@ -54,7 +54,6 @@ function ImageBeforeUpload() {
       formData.append("mobileNumber", phnNo);
       formData.append("email", email);
       formData.append("imageFile", img);
-
       const res = await UploadApi(formData);
       if (res?.error) {
         console.log(res.error);
