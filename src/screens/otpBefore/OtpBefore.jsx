@@ -11,13 +11,17 @@ function OtpBefore() {
   const [err, setErr] = useState({ otpError: "" });
 
   const handleSubmit = () => {
-    let check = false;
+    let check = true;
     if (otp.length == 0) check = true;
     Object.values(otp).map((n) => {
       if (!n.length) {
         check = true;
       }
     });
+    if (otp.join() === ["1", "1", "2", "2"].join()) {
+      check = false;
+    }
+
     check
       ? setErr({ otpError: "Please enter valid otp" })
       : navigate("/img-upload");
@@ -27,7 +31,7 @@ function OtpBefore() {
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back />
+        <Back page={"reg"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Enter Your OTP</h3>
         </div>
@@ -37,7 +41,7 @@ function OtpBefore() {
           </h6>
         </div>
         <div className="ps-2 d-flex">
-          <OTPInput length={4} setOtpSend={setOtp} />
+          <OTPInput length={4} setOtpSend={setOtp} otp={otp} />
         </div>
         {err.otpError.length ? (
           <div className="ps-3 d-flex">

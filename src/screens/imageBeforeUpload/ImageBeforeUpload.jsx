@@ -13,6 +13,7 @@ function ImageBeforeUpload() {
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [uploadMessage, setUploadMessage] = useState("");
   const modalRef = useRef(null);
 
   const [tAndC] = useState(config_termsconditions);
@@ -26,6 +27,7 @@ function ImageBeforeUpload() {
       fileLabel.textContent = file.name;
       setImg(file);
       setErrorMessage("");
+      setUploadMessage("Image Uploaded");
     } else {
       fileLabel.textContent = "Attach your file here";
       setImg(null);
@@ -100,6 +102,9 @@ function ImageBeforeUpload() {
             </div>
             {errorMessage && (
               <div className="text-danger mt-2">{errorMessage}</div>
+            )}
+            {uploadMessage && (
+              <div className="text-white mt-2">{uploadMessage}</div>
             )}
             <div className="pb-3 pt-5">
               <button

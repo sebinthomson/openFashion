@@ -5,7 +5,6 @@ import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
 import axios from "axios";
-import { saveAs } from "file-saver";
 
 function Result() {
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);

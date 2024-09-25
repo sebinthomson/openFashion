@@ -5,6 +5,7 @@ import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import SignInButton from "../../otpService/OtpService";
+import { useNavigate } from "react-router-dom";
 
 function Details() {
   const {
@@ -70,20 +71,21 @@ function Details() {
       }
     }
   };
-
+  const navigate = useNavigate();
   const handleSubmit = () => {
     if (validateForm()) {
-      const otpButtonDiv = document.getElementById("otp_button");
-      if (otpButtonDiv) {
-        const otpButton = otpButtonDiv.querySelector("button");
-        if (otpButton) {
-          otpButton.click();
-        } else {
-          console.log("Button element inside otp_button not found");
-        }
-      } else {
-        console.log("otpButton element not found");
-      }
+      navigate("/verify")
+      // const otpButtonDiv = document.getElementById("otp_button");
+      // if (otpButtonDiv) {
+      //   const otpButton = otpButtonDiv.querySelector("button");
+      //   if (otpButton) {
+      //     otpButton.click();
+      //   } else {
+      //     console.log("Button element inside otp_button not found");
+      //   }
+      // } else {
+      //   console.log("otpButton element not found");
+      // }
     }
   };
 
@@ -109,7 +111,7 @@ function Details() {
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={'register'}/>
+        <Back page={"register"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Fill the details</h3>
         </div>

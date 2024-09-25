@@ -12,6 +12,9 @@ function Back({ page }) {
       case "register":
         navigate("/");
         break;
+      case "reg":
+        navigate("/register");
+        break;
       case "img-upload":
         navigate("/register");
         break;

@@ -1,5 +1,5 @@
 import "./imageList.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -10,6 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function srcset(image, size) {
   return {
@@ -24,6 +25,7 @@ export default function CustomImageList({
   detectedImages,
   setDetectedImages,
 }) {
+  const { phnNo } = useContext(DetailsContext);
   const theme = useTheme();
 
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -69,13 +71,13 @@ export default function CustomImageList({
   };
 
   const fetchImages = async () => {
-    const res = await DetectedFaceApi("8089543963");
+    // const res = await DetectedFaceApi("8089543963");
+    const res = await DetectedFaceApi(phnNo);
     setDetectedImages(res);
   };
   useEffect(() => {
     fetchImages();
   }, []);
-
   return (
     <>
       <div className="image-list-container" style={{ height: height }}>
