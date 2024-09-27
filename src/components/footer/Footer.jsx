@@ -20,7 +20,7 @@ function Footer() {
       <div className="footer-content row w-100 bg-dark pt-4 m-0">
         <div>
           <div>
-            <h3 className="text-white miama-font">Get In Tuch With US!</h3>
+            <h3 className="text-white miama-font">Get In Touch With US!</h3>
           </div>
           <div>
             <h3 className="text-white poppins-extralight fs-6 pt-3">
