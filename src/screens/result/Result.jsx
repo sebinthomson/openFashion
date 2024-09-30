@@ -42,7 +42,7 @@ function Result() {
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
         style={{ maxWidth: "100vw" }}
       >
-        <Back page={"gallery"} />
+        <Back page={""} />
         <div className="pt-4 d-flex justify-content-between ">
           <div>
             <h3 className="text-white miama-font fs-1">Your result</h3>

@@ -16,7 +16,8 @@ function Home() {
 
   const navigate = useNavigate();
   const handleRegister = () => {
-    navigate("/register");
+    // navigate("/register");
+    navigate("/signup");
   };
   return (
     <div className="row full-height" id="belowroot">

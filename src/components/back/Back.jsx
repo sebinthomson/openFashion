@@ -18,6 +18,9 @@ function Back({ page }) {
       case "img-upload":
         navigate("/register");
         break;
+      case "":
+        navigate("/");
+        break;
     }
   };
   return (

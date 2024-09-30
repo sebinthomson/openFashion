@@ -24,7 +24,7 @@ function OtpBefore() {
 
     check
       ? setErr({ otpError: "Please enter valid otp" })
-      : navigate("/img-upload");
+      : navigate("/gallery");
   };
 
   return (
