@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
@@ -6,9 +6,14 @@ import { OTPInput } from "../../components/otpInput/OtpInput";
 import { useState } from "react";
 
 function OtpBefore() {
+  const location = useLocation();
+
   const navigate = useNavigate();
   const [otp, setOtp] = useState(Array(length).fill(""));
   const [err, setErr] = useState({ otpError: "" });
+
+  const isVerified = location.state?.isVerified || false;
+  console.log(isVerified);
 
   const handleSubmit = () => {
     let check = true;

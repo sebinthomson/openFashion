@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
@@ -6,6 +6,7 @@ import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import SignInButton from "../../otpService/OtpService";
 import { useNavigate } from "react-router-dom";
+import { config_termsconditions } from "../../../config";
 
 function Details() {
   const { fname, lname, email, setFName, setLName, setEmail } =
@@ -14,6 +15,21 @@ function Details() {
   const [errors, setErrors] = useState({});
   const [img, setImg] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
+  const modalRef = useRef(null);
+
+  const [tAndC] = useState(config_termsconditions);
+
+  // const handleSubmit = () => {
+  //   if (!img) {
+  //     setErrorMessage("Please upload an image before submitting.");
+  //   } else {
+  //     setErrorMessage("");
+  //     if (modalRef.current) {
+  //       const modal = new window.bootstrap.Modal(modalRef.current);
+  //       modal.show();
+  //     }
+  //   }
+  // };
 
   const handleInput = (key, e) => {
     const value = e.target.value;
@@ -47,9 +63,14 @@ function Details() {
     }
   };
   const navigate = useNavigate();
+
   const handleSubmit = () => {
     if (validateForm()) {
-      navigate("/verify");
+      // navigate("/verify");
+      if (modalRef.current) {
+        const modal = new window.bootstrap.Modal(modalRef.current);
+        modal.show();
+      }
       // const otpButtonDiv = document.getElementById("otp_button");
       // if (otpButtonDiv) {
       //   const otpButton = otpButtonDiv.querySelector("button");
@@ -171,8 +192,62 @@ function Details() {
             className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
             onClick={handleSubmit}
           >
-            Verify with OTP <i className="bi bi-arrow-right"></i>
+            {/* Verify with OTP <i className="bi bi-arrow-right"></i> */}
+            Submit
           </button>
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+        ref={modalRef} // Add ref to modal
+      >
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content bg-white rounded-0 modal-properties">
+            <div className="modal-header justify-content-center">
+              <h1
+                className="modal-title fs-3 miama-font text-nowrap"
+                id="staticBackdropLabel"
+              >
+                Terms & Conditions
+              </h1>
+            </div>
+            <div className="modal-body fixed-height">
+              <ol className="list-group list-group-numbered">
+                {tAndC.map((item, index) => (
+                  <li
+                    key={index}
+                    className="list-group-item fs-6 poppins-light px-2 lh-base border-0"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="modal-footer text-center justify-content-center d-flex row mx-3">
+              <button
+                className="py-2 poppins-light border-1 bg-black text-white"
+                data-bs-dismiss="modal"
+                onClick={() => {
+                  // handleAccept();
+                  navigate("/verify", { state: { isVerified: true } });
+                }}
+              >
+                Accept
+              </button>
+              <button
+                className="py-2 poppins-light border-1 bg-white"
+                data-bs-dismiss="modal"
+              >
+                Decline
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <SignInButton />

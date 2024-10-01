@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function Result() {
+  const { phnNo } = useContext(DetailsContext);
+
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleDownload = async () => {
     try {
@@ -35,6 +40,17 @@ function Result() {
       console.error(error);
     }
   };
+
+  const fetchImages = async () => {
+    // const res = await DetectedFaceApi("8089543963");
+    const res = await DetectedFaceApi(phnNo);
+    setDetectedImages(res);
+    setLoading(false);
+  };
+  useEffect(() => {
+    fetchImages();
+  }, []);
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
@@ -43,35 +59,62 @@ function Result() {
         style={{ maxWidth: "100vw" }}
       >
         <Back page={""} />
-        <div className="pt-4 d-flex justify-content-between ">
-          <div>
-            <h3 className="text-white miama-font fs-1">Your result</h3>
-          </div>
-          <div>
-            <select name="" id="" className="py-2 px-1 poppins-light">
-              <option value="">individuals</option>
-              <option value="">group</option>
-            </select>
-          </div>
-        </div>
-        <div className="pt-4 height-auto">
-          <CustomImageList
-            selectedImagesIndex={selectedImagesIndex}
-            detectedImages={detectedImages}
-            setSelectedImagesIndex={setSelectedImagesIndex}
-            setDetectedImages={setDetectedImages}
-          />
-        </div>
-        <div className="py-3 d-flex justify-content-center">
-          {selectedImagesIndex.length != 0 && (
-            <button
-              className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
-              onClick={handleDownload}
-            >
-              Download
-            </button>
-          )}
-        </div>
+        {loading ? (
+          <>
+            <div className="pt-4">
+              <h3 className="text-white miama-font fs-1">Searching......</h3>
+            </div>
+            <div>
+              <h6 className="text-white poppins-light lh-base">
+                Fetching Your Result
+              </h6>
+            </div>
+            <div className="ps-2"> </div>
+            <div className="container">
+              <div className="loadingspinner">
+                <div id="square1"></div>
+                <div id="square2"></div>
+                <div id="square3"></div>
+                <div id="square4"></div>
+                <div id="square5"></div>
+              </div>
+            </div>
+            <div className="bg-black" style={{ height: "45px" }}></div>
+          </>
+        ) : (
+          <>
+            <div className="pt-4 d-flex justify-content-between ">
+              <div>
+                <h3 className="text-white miama-font fs-1">Your result</h3>
+              </div>
+              <div>
+                <select name="" id="" className="py-2 px-1 poppins-light">
+                  <option value="">individuals</option>
+                  <option value="">group</option>
+                </select>
+              </div>
+            </div>
+            <div className="pt-4 height-auto">
+              <CustomImageList
+                selectedImagesIndex={selectedImagesIndex}
+                detectedImages={detectedImages}
+                setSelectedImagesIndex={setSelectedImagesIndex}
+                setDetectedImages={setDetectedImages}
+                setLoading={setLoading}
+              />
+            </div>
+            <div className="py-3 d-flex justify-content-center">
+              {selectedImagesIndex.length != 0 && (
+                <button
+                  className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
+                  onClick={handleDownload}
+                >
+                  Download
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
       <div
         className="modal fade"

@@ -24,6 +24,7 @@ export default function CustomImageList({
   setSelectedImagesIndex,
   detectedImages,
   setDetectedImages,
+  setLoading,
 }) {
   const { phnNo } = useContext(DetailsContext);
   const theme = useTheme();
@@ -70,14 +71,6 @@ export default function CustomImageList({
     });
   };
 
-  const fetchImages = async () => {
-    // const res = await DetectedFaceApi("8089543963");
-    const res = await DetectedFaceApi(phnNo);
-    setDetectedImages(res);
-  };
-  useEffect(() => {
-    fetchImages();
-  }, []);
   return (
     <>
       <div className="image-list-container" style={{ height: height }}>
