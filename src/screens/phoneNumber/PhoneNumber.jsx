@@ -33,7 +33,7 @@ function PhoneNumber() {
   };
   const handleSubmit = () => {
     if (validateForm()) {
-      if (phnNo != "1111111111") {
+      if (phnNo != "8111800085") {
         navigate("/register", { state: { phnNo: phnNo } });
       } else {
         navigate("/verify", { state: { details: phnNo, isRegistered: true } });
