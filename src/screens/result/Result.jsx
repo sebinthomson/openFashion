@@ -22,6 +22,9 @@ function Result() {
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
+      const modalElement = document.getElementById("staticBackdrop");
+      const modal = new Modal(modalElement);
+      modal.show();
       downloadPromises = selectedImagesIndex.map(async (imageUrl, index) => {
         const response = await axios.get(imageUrl, {
           responseType: "blob",
@@ -36,11 +39,6 @@ function Result() {
         link.click();
         window.URL.revokeObjectURL(tempUrl);
         link.remove();
-        if (index == 0) {
-          const modalElement = document.getElementById("staticBackdrop");
-          const modal = new Modal(modalElement);
-          modal.show();
-        }
       });
       await Promise.all(downloadPromises);
       await new Promise((resolve) => setTimeout(resolve, 1000));
