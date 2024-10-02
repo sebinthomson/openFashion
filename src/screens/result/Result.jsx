@@ -90,7 +90,7 @@ function Result() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar />
+      <Navbar showLogout={!loading} />
       <div
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
         style={{ maxWidth: "100vw" }}

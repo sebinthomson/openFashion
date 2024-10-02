@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function Navbar() {
-  const [showLogout, setShowLogout] = useState(false);
-  const location = useLocation();
-  const navigate = useNavigate();
+function Navbar({showLogout}) {
+  // const [showLogout, setShowLogout] = useState(false);
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    const currentPath = location.pathname;
-    if (currentPath == "/gallery") setShowLogout(true);
-  }, [location]);
+  // useEffect(() => {
+    // const currentPath = location.pathname;
+    // if (currentPath == "/gallery") setShowLogout(true);
+  // }, [location]);
 
   return (
     <nav className="navbar navbar-expand-lg bg-black header">
