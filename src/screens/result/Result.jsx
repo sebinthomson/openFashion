@@ -3,24 +3,26 @@ import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
-import { Modal } from "bootstrap";
-import axios from "axios";
 import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
 import { useLocation } from "react-router-dom";
 import UploadApi from "../../api/upload/Upload";
-import { setWithExpiry } from "../../utils/localstorage";
+import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
+import { Modal } from "bootstrap";
+import axios from "axios";
 
 function Result() {
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [downloadLoading, setDownloadLoading] = useState(false);
   const location = useLocation();
   const details = location.state?.details || false;
   const isRegistered = location.state?.isRegistered || false;
-
+  let downloadPromises;
   const handleDownload = async () => {
     try {
-      selectedImagesIndex?.map(async (imageUrl, index) => {
+      setDownloadLoading(true);
+      downloadPromises = selectedImagesIndex.map(async (imageUrl, index) => {
         const response = await axios.get(imageUrl, {
           responseType: "blob",
         });
@@ -34,11 +36,15 @@ function Result() {
         link.click();
         window.URL.revokeObjectURL(tempUrl);
         link.remove();
-
-        const modalElement = document.getElementById("staticBackdrop");
-        const modal = new Modal(modalElement);
-        modal.show();
+        if (index == 0) {
+          const modalElement = document.getElementById("staticBackdrop");
+          const modal = new Modal(modalElement);
+          modal.show();
+        }
       });
+      await Promise.all(downloadPromises);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setDownloadLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -60,19 +66,26 @@ function Result() {
       }
       const res = await UploadApi(formData);
       console.log("res", res);
-      setWithExpiry("phnNo", phnNo, 86400);
+      setWithExpiry("phnNo", phnNo, 86400000);
     } catch (error) {
       console.info(error);
     }
   };
 
   useEffect(() => {
-    if (isRegistered) {
+    const phnNo = getWithExpiry("phnNo");
+    if (isRegistered || phnNo) {
+      if (phnNo != null) {
+        setWithExpiry("phnNo", phnNo, 86400000);
+        fetchImages(phnNo);
+      } else {
+        fetchImages(details);
+        setWithExpiry("phnNo", details, 86400000);
+      }
       console.log("fetching images", details);
-      fetchImages(details);
     } else {
       console.log("new user for registration", details);
-      handleUploadApi(details);
+      if (!details) handleUploadApi(details);
     }
   }, []);
 
@@ -186,9 +199,38 @@ function Result() {
               </div>
               <div>
                 <h3 className="text-center text-black miama-font fs-4">
-                  Download Successful
+                  {downloadLoading ? "Downloading" : "Download Successful"}
                 </h3>
               </div>
+              {downloadLoading ? (
+                <div className="d-flex justify-content-center">
+                  <div>
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    {/* <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div> */}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="py-3 d-flex justify-content-center">
                 <button
                   className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"

@@ -11,7 +11,7 @@ export const OTPInput = ({ length = 4, setOtpSend }) => {
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
-      setOtpSend(newOtp)
+      setOtpSend(newOtp);
       if (index < length - 1) {
         inputs.current[index + 1].focus();
       }
@@ -34,7 +34,7 @@ export const OTPInput = ({ length = 4, setOtpSend }) => {
       {otp.map((_, index) => (
         <input
           key={index}
-          type="text"
+          type="number"
           maxLength="1"
           value={otp[index]}
           onChange={(e) => handleChange(e, index)}

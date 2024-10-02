@@ -33,10 +33,10 @@ function PhoneNumber() {
   };
   const handleSubmit = () => {
     if (validateForm()) {
-      if (phnNo != "8111800085") {
-        navigate("/register", { state: { phnNo: phnNo } });
-      } else {
+      if (phnNo == "8111800085") {
         navigate("/verify", { state: { details: phnNo, isRegistered: true } });
+      } else {
+        navigate("/register", { state: { phnNo: phnNo } });
       }
       // const otpButtonDiv = document.getElementById("otp_button");
       // if (otpButtonDiv) {

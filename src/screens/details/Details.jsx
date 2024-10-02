@@ -93,7 +93,7 @@ function Details() {
     if (!phnNo) navigate("/");
   }, [phnNo]);
 
-  const handleAccept = async () => {
+  const handleAccept = () => {
     const formData = new FormData();
     formData.append("firstName", fname);
     formData.append("lastName", lname);
