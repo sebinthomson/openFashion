@@ -67,6 +67,7 @@ function Result() {
       const res = await UploadApi(formData);
       console.log("res", res);
       setWithExpiry("phnNo", phnNo, 86400000);
+      fetchImages(phnNo);
     } catch (error) {
       console.info(error);
     }
@@ -85,7 +86,7 @@ function Result() {
       console.log("fetching images", details);
     } else {
       console.log("new user for registration", details);
-      if (!details) handleUploadApi(details);
+      if (details) handleUploadApi(details);
     }
   }, []);
 
