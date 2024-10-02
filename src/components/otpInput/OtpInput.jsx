@@ -17,8 +17,11 @@ export const OTPInput = ({ length = 4, setOtpSend }) => {
       }
     }
 
-    if (value === "" && index > 0) {
-      inputs.current[index - 1].focus();
+    if (value === "") {
+      const newOtp = [...otp];
+      newOtp[index] = "";
+      setOtp(newOtp);
+      setOtpSend(newOtp);
     }
   };
 
