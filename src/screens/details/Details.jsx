@@ -1,39 +1,27 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import SignInButton from "../../otpService/OtpService";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
-
 function Details() {
   const { fname, lname, email, setFName, setLName, setEmail } =
     useContext(DetailsContext);
-
   const [errors, setErrors] = useState({});
   const [img, setImg] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
   const modalRef = useRef(null);
-
   const [tAndC] = useState(config_termsconditions);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // const handleSubmit = () => {
-  //   if (!img) {
-  //     setErrorMessage("Please upload an image before submitting.");
-  //   } else {
-  //     setErrorMessage("");
-  //     if (modalRef.current) {
-  //       const modal = new window.bootstrap.Modal(modalRef.current);
-  //       modal.show();
-  //     }
-  //   }
-  // };
+  const phnNo = location.state?.phnNo || false;
 
   const handleInput = (key, e) => {
     const value = e.target.value;
-
     if (key === "fName") {
       setFName(value);
       if (!value) {
@@ -42,7 +30,6 @@ function Details() {
         setErrors((prev) => ({ ...prev, fName: "" }));
       }
     }
-
     if (key === "lName") {
       setLName(value);
       if (!value) {
@@ -51,7 +38,6 @@ function Details() {
         setErrors((prev) => ({ ...prev, lName: "" }));
       }
     }
-
     if (key === "email") {
       setEmail(value);
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -62,26 +48,13 @@ function Details() {
       }
     }
   };
-  const navigate = useNavigate();
 
   const handleSubmit = () => {
     if (validateForm()) {
-      // navigate("/verify");
       if (modalRef.current) {
         const modal = new window.bootstrap.Modal(modalRef.current);
         modal.show();
       }
-      // const otpButtonDiv = document.getElementById("otp_button");
-      // if (otpButtonDiv) {
-      //   const otpButton = otpButtonDiv.querySelector("button");
-      //   if (otpButton) {
-      //     otpButton.click();
-      //   } else {
-      //     console.log("Button element inside otp_button not found");
-      //   }
-      // } else {
-      //   console.log("otpButton element not found");
-      // }
     }
   };
 
@@ -114,6 +87,20 @@ function Details() {
       fileLabel.textContent = "Attach your file here";
       setImg(null);
     }
+  };
+
+  useEffect(() => {
+    if (!phnNo) navigate("/");
+  }, [phnNo]);
+
+  const handleAccept = async () => {
+    const formData = new FormData();
+    formData.append("firstName", fname);
+    formData.append("lastName", lname);
+    formData.append("mobileNumber", phnNo);
+    formData.append("email", email);
+    formData.append("imageFile", img);
+    navigate("/verify", { state: { details: formData, isRegistered: false } });
   };
 
   return (
@@ -234,8 +221,7 @@ function Details() {
                 className="py-2 poppins-light border-1 bg-black text-white"
                 data-bs-dismiss="modal"
                 onClick={() => {
-                  // handleAccept();
-                  navigate("/verify", { state: { isVerified: true } });
+                  handleAccept();
                 }}
               >
                 Accept

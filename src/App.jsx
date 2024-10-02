@@ -7,7 +7,6 @@ import {
 import Home from "./screens/home/Home";
 import Details from "./screens/details/Details";
 import OtpBefore from "./screens/otpBefore/OtpBefore";
-import ImageBeforeUpload from "./screens/imageBeforeUpload/ImageBeforeUpload";
 import Result from "./screens/result/Result";
 import PrivateRouteUser from "./components/privateRouteUser/PrivateRouteUser";
 import PhoneNumber from "./screens/phoneNumber/PhoneNumber";
@@ -20,7 +19,6 @@ const router = createBrowserRouter(
         <Route path="/register" element={<Details />} />
         <Route path="/signup" element={<PhoneNumber />} />
         <Route path="/verify" element={<OtpBefore />} />
-        <Route path="/img-upload" element={<ImageBeforeUpload />} />
         <Route path="/gallery" element={<Result />} />
       </Route>
     </>

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { getWithExpiry } from "../../utils/localstorage";
 
 function Back({ page }) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Back({ page }) {
         break;
       case "":
         navigate("/");
+        getWithExpiry("phnNo");
         break;
     }
   };

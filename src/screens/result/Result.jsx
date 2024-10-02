@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
@@ -6,14 +6,17 @@ import Navbar from "../../components/navbar/Navbar";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
-import { DetailsContext } from "../../contexts/DetailsContext";
+import { useLocation } from "react-router-dom";
+import UploadApi from "../../api/upload/Upload";
+import { setWithExpiry } from "../../utils/localstorage";
 
 function Result() {
-  const { phnNo } = useContext(DetailsContext);
-
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const details = location.state?.details || false;
+  const isRegistered = location.state?.isRegistered || false;
 
   const handleDownload = async () => {
     try {
@@ -41,14 +44,36 @@ function Result() {
     }
   };
 
-  const fetchImages = async () => {
+  const fetchImages = async (phnNo) => {
+    setLoading(true);
     // const res = await DetectedFaceApi("8089543963");
     const res = await DetectedFaceApi(phnNo);
     setDetectedImages(res);
     setLoading(false);
   };
+
+  const handleUploadApi = async (formData) => {
+    try {
+      let phnNo;
+      for (const [key, value] of formData.entries()) {
+        if (key == "mobileNumber") phnNo = value;
+      }
+      const res = await UploadApi(formData);
+      console.log("res", res);
+      setWithExpiry("phnNo", phnNo, 86400);
+    } catch (error) {
+      console.info(error);
+    }
+  };
+
   useEffect(() => {
-    fetchImages();
+    if (isRegistered) {
+      console.log("fetching images", details);
+      fetchImages(details);
+    } else {
+      console.log("new user for registration", details);
+      handleUploadApi(details);
+    }
   }, []);
 
   return (

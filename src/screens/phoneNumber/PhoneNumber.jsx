@@ -8,8 +8,8 @@ import SignInButton from "../../otpService/OtpService";
 import { useNavigate } from "react-router-dom";
 
 function PhoneNumber() {
+  const navigate = useNavigate();
   const { phnNoCC, phnNo, setPhnNoCC, setPhnNo } = useContext(DetailsContext);
-
   const [errors, setErrors] = useState({});
 
   const handleSelect = (code) => {
@@ -31,13 +31,12 @@ function PhoneNumber() {
       }
     }
   };
-  const navigate = useNavigate();
   const handleSubmit = () => {
     if (validateForm()) {
-      if (phnNo == "1111111111") {
-        navigate("/register");
+      if (phnNo != "1111111111") {
+        navigate("/register", { state: { phnNo: phnNo } });
       } else {
-        navigate("/verify");
+        navigate("/verify", { state: { details: phnNo, isRegistered: true } });
       }
       // const otpButtonDiv = document.getElementById("otp_button");
       // if (otpButtonDiv) {
@@ -72,11 +71,11 @@ function PhoneNumber() {
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back page={"register"} />
         <div className="pt-4">
-          <h3 className="text-white miama-font fs-1">Signup/ Login</h3>
+          <h3 className="text-white miama-font fs-1">Signup / Login</h3>
         </div>
         <div>
           <h6 className="text-white poppins-light lh-base">
-            One step You are almost there.....
+            One step to your login.....
           </h6>
         </div>
         <div className="input-group flex-nowrap pt-3 d-flex flex-column">

@@ -3,17 +3,15 @@ import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import { OTPInput } from "../../components/otpInput/OtpInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function OtpBefore() {
   const location = useLocation();
-
   const navigate = useNavigate();
   const [otp, setOtp] = useState(Array(length).fill(""));
   const [err, setErr] = useState({ otpError: "" });
-
-  const isVerified = location.state?.isVerified || false;
-  console.log(isVerified);
+  const isRegistered = location.state?.isRegistered || false;
+  const details = location.state?.details || false;
 
   const handleSubmit = () => {
     let check = true;
@@ -26,11 +24,28 @@ function OtpBefore() {
     if (otp.join() === ["1", "1", "2", "2"].join()) {
       check = false;
     }
-
-    check
-      ? setErr({ otpError: "Please enter valid otp" })
-      : navigate("/gallery");
+    if (check) {
+      setErr({ otpError: "Please enter valid otp" });
+    } else {
+      if (isRegistered) {
+        navigate("/gallery", {
+          state: { details: details, isRegistered: isRegistered },
+        });
+      } else {
+        navigate("/gallery", {
+          state: { details: details, isRegistered: isRegistered },
+        });
+      }
+    }
   };
+
+  // useEffect(() => {
+  //   if (isRegistered) {
+  //     console.log("api to send otp to", details);
+  //   } else {
+  //     console.log("new user for registration, send otp api", details);
+  //   }
+  // }, []);
 
   return (
     <div className="row full-height" id="belowroot">
