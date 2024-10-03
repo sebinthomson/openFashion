@@ -33,7 +33,7 @@ function OtpBefore() {
         });
       } else {
         navigate("/gallery", {
-          state: { details: details, isRegistered: isRegistered },
+          state: { details: {}, isRegistered: isRegistered },
         });
       }
     }

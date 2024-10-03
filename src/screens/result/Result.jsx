@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
@@ -9,8 +9,10 @@ import UploadApi from "../../api/upload/Upload";
 import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function Result() {
+  const { formData } = useContext(DetailsContext);
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,6 +21,7 @@ function Result() {
   const details = location.state?.details || false;
   const isRegistered = location.state?.isRegistered || false;
   let downloadPromises;
+
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
@@ -56,13 +59,13 @@ function Result() {
     setLoading(false);
   };
 
-  const handleUploadApi = async (formData) => {
+  const handleUploadApi = async (formDataParameter) => {
     try {
       let phnNo;
-      for (const [key, value] of formData.entries()) {
+      for (const [key, value] of formDataParameter.entries()) {
         if (key == "mobileNumber") phnNo = value;
       }
-      const res = await UploadApi(formData);
+      const res = await UploadApi(formDataParameter);
       console.log("res", res);
       setWithExpiry("phnNo", phnNo, 86400000);
       fetchImages(phnNo);
@@ -83,11 +86,10 @@ function Result() {
       }
       console.log("fetching images", details);
     } else {
-      console.log("new user for registration", details);
-      if (details) handleUploadApi(details);
+      console.log("new user for registration", formData);
+      if (formData) handleUploadApi(formData);
     }
   }, []);
-
   return (
     <div className="row full-height" id="belowroot">
       <Navbar showLogout={!loading} />

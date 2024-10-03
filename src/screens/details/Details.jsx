@@ -8,7 +8,7 @@ import SignInButton from "../../otpService/OtpService";
 import { useLocation, useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
 function Details() {
-  const { fname, lname, email, setFName, setLName, setEmail } =
+  const { fname, lname, email, setFName, setLName, setEmail, setFormData } =
     useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [img, setImg] = useState(false);
@@ -100,7 +100,9 @@ function Details() {
     formData.append("mobileNumber", phnNo);
     formData.append("email", email);
     formData.append("imageFile", img);
-    navigate("/verify", { state: { details: formData, isRegistered: false } });
+    localStorage.setItem("formData", formData);
+    setFormData(formData);
+    navigate("/verify", { state: { details: {}, isRegistered: false } });
   };
 
   return (
