@@ -6,11 +6,13 @@ import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import SignInButton from "../../otpService/OtpService";
 import { useNavigate } from "react-router-dom";
+import RegistrationDetailsApi from "../../api/userDetails./userDetails";
 
 function PhoneNumber() {
   const navigate = useNavigate();
   const { phnNoCC, phnNo, setPhnNoCC, setPhnNo } = useContext(DetailsContext);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleSelect = (code) => {
     setPhnNoCC(code);
@@ -33,11 +35,7 @@ function PhoneNumber() {
   };
   const handleSubmit = () => {
     if (validateForm()) {
-      if (phnNo == "8111800085") {
-        navigate("/verify", { state: { details: phnNo, isRegistered: true } });
-      } else {
-        navigate("/register", { state: { phnNo: phnNo } });
-      }
+      fetchRegistrationDetails(phnNo);
       // const otpButtonDiv = document.getElementById("otp_button");
       // if (otpButtonDiv) {
       //   const otpButton = otpButtonDiv.querySelector("button");
@@ -49,6 +47,21 @@ function PhoneNumber() {
       // } else {
       //   console.log("otpButton element not found");
       // }
+    }
+  };
+
+  const fetchRegistrationDetails = async () => {
+    try {
+      setLoading(true);
+      const res = await RegistrationDetailsApi(phnNo);
+      setLoading(false);
+      if (res != undefined) {
+        navigate("/verify", { state: { details: phnNo, isRegistered: true } });
+      } else {
+        navigate("/register", { state: { phnNo: phnNo } });
+      }
+    } catch (error) {
+      console.info(error);
     }
   };
 
@@ -119,13 +132,22 @@ function PhoneNumber() {
           </div>
           {errors.phnNo && <div className="text-danger">{errors.phnNo}</div>}
         </div>
-        <div className="pb-3 pt-5">
-          <button
-            className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
-            onClick={handleSubmit}
-          >
-            Verify with OTP <i className="bi bi-arrow-right"></i>
-          </button>
+        <div className="pb-3 pt-5 d-flex align-items-center">
+          <div>
+            <button
+              className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
+              onClick={handleSubmit}
+            >
+              Verify with OTP <i className="bi bi-arrow-right"></i>{" "}
+            </button>
+          </div>
+          {loading ? (
+            <div className="spinner-border ms-4 text-light" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       <SignInButton />
