@@ -8,10 +8,9 @@ import SignInButton from "../../otpService/OtpService";
 import { useLocation, useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
 function Details() {
-  const { fname, lname, email, setFName, setLName, setEmail, setFormData } =
+  const { fname, lname, email, img, setImg, setFName, setLName, setEmail } =
     useContext(DetailsContext);
   const [errors, setErrors] = useState({});
-  const [img, setImg] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
   const modalRef = useRef(null);
   const [tAndC] = useState(config_termsconditions);
@@ -94,14 +93,6 @@ function Details() {
   }, [phnNo]);
 
   const handleAccept = () => {
-    const formData = new FormData();
-    formData.append("firstName", fname);
-    formData.append("lastName", lname);
-    formData.append("mobileNumber", phnNo);
-    formData.append("email", email);
-    formData.append("imageFile", img);
-    localStorage.setItem("formData", formData);
-    setFormData(formData);
     navigate("/verify", { state: { details: {}, isRegistered: false } });
   };
 

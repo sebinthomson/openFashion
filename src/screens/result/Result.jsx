@@ -12,7 +12,7 @@ import axios from "axios";
 import { DetailsContext } from "../../contexts/DetailsContext";
 
 function Result() {
-  const { formData } = useContext(DetailsContext);
+  const { fname, lname, email, phnNo, img } = useContext(DetailsContext);
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,22 +75,28 @@ function Result() {
   };
 
   useEffect(() => {
-    const phnNo = getWithExpiry("phnNo");
-    if (isRegistered || phnNo) {
-      if (phnNo != null) {
-        setWithExpiry("phnNo", phnNo, 86400000);
-        fetchImages(phnNo);
+    const phnNumber = getWithExpiry("phnNo");
+    if (isRegistered || phnNumber) {
+      if (phnNumber != null) {
+        setWithExpiry("phnNo", phnNumber, 86400000);
+        fetchImages(phnNumber);
       } else {
         fetchImages(details);
         setWithExpiry("phnNo", details, 86400000);
       }
       console.log("fetching images", details);
     } else {
+      const formData = new FormData();
+      formData.append("firstName", fname);
+      formData.append("lastName", lname);
+      formData.append("mobileNumber", phnNo);
+      formData.append("email", email);
+      formData.append("imageFile", img);
       console.log("new user for registration", formData);
       if (formData) handleUploadApi(formData);
     }
   }, []);
-  
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar showLogout={!loading} />

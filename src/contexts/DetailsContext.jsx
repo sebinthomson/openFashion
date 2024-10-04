@@ -8,7 +8,7 @@ export const DetailsProvider = ({ children }) => {
   const [phnNoCC, setPhnNoCC] = useState("+91");
   const [phnNo, setPhnNo] = useState("");
   const [email, setEmail] = useState("");
-  const [formData, setFormData] = useState(false);
+  const [img, setImg] = useState(false);
 
   return (
     <DetailsContext.Provider
@@ -18,8 +18,8 @@ export const DetailsProvider = ({ children }) => {
         phnNoCC,
         phnNo,
         email,
-        formData,
-        setFormData,
+        img,
+        setImg,
         setFName,
         setLName,
         setPhnNoCC,
