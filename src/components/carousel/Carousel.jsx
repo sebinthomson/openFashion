@@ -10,13 +10,13 @@ function CarouselComponent() {
     "/images/4.jpg",
   ];
 
-  // useEffect(() => {
-  //   const carouselElement = document.getElementById("carouselExampleInterval");
-  //   const carousel = new Carousel(carouselElement, {
-  //     interval: 1500,
-  //     ride: "carousel",
-  //   });
-  // }, []);
+  useEffect(() => {
+    const carouselElement = document.getElementById("carouselExampleInterval");
+    const carousel = new Carousel(carouselElement, {
+      interval: 1500,
+      ride: "carousel",
+    });
+  }, []);
 
   return (
     <div
