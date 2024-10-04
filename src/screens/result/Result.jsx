@@ -61,10 +61,6 @@ function Result() {
 
   const handleUploadApi = async (formDataParameter) => {
     try {
-      let phnNo;
-      for (const [key, value] of formDataParameter.entries()) {
-        if (key == "mobileNumber") phnNo = value;
-      }
       const res = await UploadApi(formDataParameter);
       console.log("res", res);
       setWithExpiry("phnNo", phnNo, 86400000);
