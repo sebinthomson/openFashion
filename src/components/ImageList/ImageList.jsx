@@ -1,5 +1,5 @@
 import "./imageList.css";
-import { useContext, useEffect, useState } from "react";
+import {  useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -9,8 +9,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
-import { DetailsContext } from "../../contexts/DetailsContext";
 
 function srcset(image, size) {
   return {
@@ -26,7 +24,6 @@ export default function CustomImageList({
   setDetectedImages,
   setLoading,
 }) {
-  const { phnNo } = useContext(DetailsContext);
   const theme = useTheme();
 
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));

@@ -90,6 +90,7 @@ function Result() {
       if (formData) handleUploadApi(formData);
     }
   }, []);
+  
   return (
     <div className="row full-height" id="belowroot">
       <Navbar showLogout={!loading} />
