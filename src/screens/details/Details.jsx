@@ -4,20 +4,25 @@ import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
-import SignInButton from "../../otpService/OtpService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
 function Details() {
-  const { fname, lname, email, img, setImg, setFName, setLName, setEmail } =
-    useContext(DetailsContext);
+  const {
+    fname,
+    lname,
+    email,
+    img,
+    phnNo,
+    setImg,
+    setFName,
+    setLName,
+    setEmail,
+  } = useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [uploadMsg, setUploadMsg] = useState("");
   const modalRef = useRef(null);
   const [tAndC] = useState(config_termsconditions);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const phnNo = location.state?.phnNo || false;
 
   const handleInput = (key, e) => {
     const value = e.target.value;
@@ -47,7 +52,7 @@ function Details() {
       }
     }
   };
-
+  
   const handleSubmit = () => {
     if (validateForm()) {
       if (modalRef.current) {
@@ -89,18 +94,20 @@ function Details() {
   };
 
   useEffect(() => {
-    if (!phnNo) navigate("/");
+    if (phnNo && phnNo.length != 10) {
+      navigate("/");
+    }
   }, [phnNo]);
 
   const handleAccept = () => {
-    navigate("/verify", { state: { details: {}, isRegistered: false } });
+    navigate("/verify");
   };
 
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={"register"} />
+        <Back page={"/signup"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Fill the details</h3>
         </div>
@@ -172,7 +179,6 @@ function Details() {
             className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
             onClick={handleSubmit}
           >
-            {/* Verify with OTP <i className="bi bi-arrow-right"></i> */}
             Submit
           </button>
         </div>
@@ -229,7 +235,6 @@ function Details() {
           </div>
         </div>
       </div>
-      <SignInButton />
       <Footer />
     </div>
   );

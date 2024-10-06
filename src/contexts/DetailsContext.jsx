@@ -9,6 +9,7 @@ export const DetailsProvider = ({ children }) => {
   const [phnNo, setPhnNo] = useState("");
   const [email, setEmail] = useState("");
   const [img, setImg] = useState(false);
+  const [isRegistered, setIsRegisterd] = useState("undefined");
 
   return (
     <DetailsContext.Provider
@@ -19,6 +20,8 @@ export const DetailsProvider = ({ children }) => {
         phnNo,
         email,
         img,
+        isRegistered,
+        setIsRegisterd,
         setImg,
         setFName,
         setLName,

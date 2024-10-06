@@ -4,24 +4,23 @@ import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
 import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
-import { useLocation } from "react-router-dom";
 import UploadApi from "../../api/upload/Upload";
 import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 import { Modal } from "bootstrap";
 import axios from "axios";
 import { DetailsContext } from "../../contexts/DetailsContext";
+import { useNavigate } from "react-router-dom";
 
 function Result() {
-  const { fname, lname, email, phnNo, img } = useContext(DetailsContext);
+  const { fname, lname, isRegistered, phnNo, email, img } =
+    useContext(DetailsContext);
   const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
-  const location = useLocation();
-  const details = location.state?.details || false;
-  const isRegistered = location.state?.isRegistered || false;
-  let downloadPromises;
+  const navigate = useNavigate();
 
+  let downloadPromises;
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
@@ -53,54 +52,64 @@ function Result() {
 
   const fetchImages = async (phnNo) => {
     setLoading(true);
-    // const res = await DetectedFaceApi("8089543963");
     const res = await DetectedFaceApi(phnNo);
     setDetectedImages(res);
     setLoading(false);
   };
 
-  const handleUploadApi = async (formDataParameter) => {
+  const handleUploadApi = async (formData, phnNo) => {
     try {
-      const res = await UploadApi(formDataParameter);
-      console.log("res", res);
-      setWithExpiry("phnNo", phnNo, 86400000);
-      fetchImages(phnNo);
+      const res = await UploadApi(formData);
+      if (
+        res.message == "File successfully uploaded" ||
+        res.message == "Mobile number already registered"
+      ) {
+        setWithExpiry("phnNo", phnNo, 86400000);
+        fetchImages(phnNo);
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       console.info(error);
     }
   };
 
   useEffect(() => {
-    const phnNumber = getWithExpiry("phnNo");
-    if (isRegistered || phnNumber) {
-      if (phnNumber != null) {
-        setWithExpiry("phnNo", phnNumber, 86400000);
-        fetchImages(phnNumber);
+    if (isRegistered == false || isRegistered == true) {
+      if (!isRegistered) {
+        if (fname && lname && email && img && phnNo) {
+          const formData = new FormData();
+          formData.append("firstName", fname);
+          formData.append("lastName", lname);
+          formData.append("mobileNumber", phnNo);
+          formData.append("email", email);
+          formData.append("imageFile", img);
+          handleUploadApi(formData, phnNo);
+        }
       } else {
-        fetchImages(details);
-        setWithExpiry("phnNo", details, 86400000);
+        if (phnNo) {
+          setWithExpiry("phnNo", phnNo, 86400000);
+          fetchImages(phnNo);
+        }
       }
-      console.log("fetching images", details);
     } else {
-      const formData = new FormData();
-      formData.append("firstName", fname);
-      formData.append("lastName", lname);
-      formData.append("mobileNumber", phnNo);
-      formData.append("email", email);
-      formData.append("imageFile", img);
-      console.log("new user for registration", formData);
-      if (formData) handleUploadApi(formData);
+      const phnNoLS = getWithExpiry("phnNo");
+      if (phnNoLS != null) {
+        fetchImages(phnNoLS);
+      } else {
+        navigate("/");
+      }
     }
-  }, []);
+  }, [phnNo]);
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar showLogout={!loading} />
+      <Navbar />
       <div
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
-        style={{ maxWidth: "100vw" }}
+        // style={{ maxWidth: "100vw" }}
       >
-        <Back page={""} />
+        <Back page={"/"} />
         {loading ? (
           <>
             <div className="pt-4">

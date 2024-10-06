@@ -17,6 +17,7 @@ export const OTPInput = ({ length = 4, setOtpSend }) => {
       }
     }
 
+ 
     if (value === "") {
       const newOtp = [...otp];
       newOtp[index] = "";

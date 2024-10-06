@@ -4,13 +4,13 @@ import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
-import SignInButton from "../../otpService/OtpService";
 import { useNavigate } from "react-router-dom";
-import RegistrationDetailsApi from "../../api/userDetails./userDetails";
+import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
 
 function PhoneNumber() {
   const navigate = useNavigate();
-  const { phnNoCC, phnNo, setPhnNoCC, setPhnNo } = useContext(DetailsContext);
+  const { phnNoCC, phnNo, setPhnNoCC, setPhnNo, setIsRegisterd } =
+    useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -35,33 +35,7 @@ function PhoneNumber() {
   };
   const handleSubmit = () => {
     if (validateForm()) {
-      fetchRegistrationDetails(phnNo);
-      // const otpButtonDiv = document.getElementById("otp_button");
-      // if (otpButtonDiv) {
-      //   const otpButton = otpButtonDiv.querySelector("button");
-      //   if (otpButton) {
-      //     otpButton.click();
-      //   } else {
-      //     console.log("Button element inside otp_button not found");
-      //   }
-      // } else {
-      //   console.log("otpButton element not found");
-      // }
-    }
-  };
-
-  const fetchRegistrationDetails = async () => {
-    try {
-      setLoading(true);
-      const res = await RegistrationDetailsApi(phnNo);
-      setLoading(false);
-      if (res != undefined) {
-        navigate("/verify", { state: { details: phnNo, isRegistered: true } });
-      } else {
-        navigate("/register", { state: { phnNo: phnNo } });
-      }
-    } catch (error) {
-      console.info(error);
+      fetchRegistrationDetails();
     }
   };
 
@@ -78,11 +52,34 @@ function PhoneNumber() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const fetchRegistrationDetails = async () => {
+    try {
+      setLoading(true);
+      const res = await RegistrationDetailsApi(phnNo);
+      setLoading(false);
+      if (
+        res?.image_name &&
+        res?.last_name &&
+        res?.first_name &&
+        res?.mobile_number &&
+        res?.email
+      ) {
+        navigate("/verify");
+        setIsRegisterd(true);
+      } else {
+        setIsRegisterd(false);
+        navigate("/register");
+      }
+    } catch (error) {
+      console.info(error);
+    }
+  };
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={"register"} />
+        <Back page={"/"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Signup / Login</h3>
         </div>
@@ -150,7 +147,6 @@ function PhoneNumber() {
           )}
         </div>
       </div>
-      <SignInButton />
       <Footer />
     </div>
   );

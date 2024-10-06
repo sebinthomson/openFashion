@@ -8,9 +8,9 @@ import "./index.css";
 import { DetailsProvider } from "./contexts/DetailsContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <DetailsProvider>
       <App />
     </DetailsProvider>
-  </StrictMode>
+  // </StrictMode>
 );

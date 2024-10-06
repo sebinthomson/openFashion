@@ -18,6 +18,7 @@ function Home() {
   const handleRegister = () => {
     navigate("/signup");
   };
+  
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />

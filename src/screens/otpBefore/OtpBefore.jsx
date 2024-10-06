@@ -1,17 +1,17 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import { OTPInput } from "../../components/otpInput/OtpInput";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DetailsContext } from "../../contexts/DetailsContext";
+import { setWithExpiry } from "../../utils/localstorage";
 
 function OtpBefore() {
-  const location = useLocation();
+  const { phnNo, isRegistered } = useContext(DetailsContext);
   const navigate = useNavigate();
   const [otp, setOtp] = useState(Array(length).fill(""));
   const [err, setErr] = useState({ otpError: "" });
-  const isRegistered = location.state?.isRegistered || false;
-  const details = location.state?.details || false;
 
   const handleSubmit = () => {
     let check = true;
@@ -27,31 +27,24 @@ function OtpBefore() {
     if (check) {
       setErr({ otpError: "Please enter valid otp" });
     } else {
-      if (isRegistered) {
-        navigate("/gallery", {
-          state: { details: details, isRegistered: isRegistered },
-        });
-      } else {
-        navigate("/gallery", {
-          state: { details: {}, isRegistered: isRegistered },
-        });
+      if (isRegistered == true){
+        setWithExpiry("phnNo",phnNo,86400000)
       }
+      navigate("/gallery");
     }
   };
 
-  // useEffect(() => {
-  //   if (isRegistered) {
-  //     console.log("api to send otp to", details);
-  //   } else {
-  //     console.log("new user for registration, send otp api", details);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (phnNo && phnNo.length != 10) {
+      navigate("/");
+    }
+  }, [phnNo]);
 
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={"reg"} />
+        <Back page={"/signup"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Enter Your OTP</h3>
         </div>

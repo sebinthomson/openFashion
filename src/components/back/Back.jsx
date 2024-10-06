@@ -4,24 +4,11 @@ function Back({ page }) {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    switch (page) {
-      case "gallery":
-        localStorage.removeItem("mNumber");
-        navigate("/register");
-        break;
-      case "register":
-        navigate("/");
-        break;
-      case "reg":
-        navigate("/register");
-        break;
-      case "img-upload":
-        navigate("/register");
-        break;
-      case "":
-        navigate("/");
-        localStorage.removeItem("phnNo");
-        break;
+    if (page == "/") {
+      localStorage.removeItem("phnNo");
+    }
+    if (page?.length) {
+      navigate(page);
     }
   };
   return (
