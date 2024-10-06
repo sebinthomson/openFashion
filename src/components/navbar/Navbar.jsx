@@ -1,30 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import { LogoutOutlined } from "@mui/icons-material";
-
-function Navbar({ showLogout }) {
-  const navigate = useNavigate();
-
+function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-black header">
       <div className="container-fluid d-flex justify-content-between align-items-center">
         <div>
           <img className="navbar-logo" src="/logo-tp.png" alt="Logo" />
         </div>
-        {showLogout ? (
-          <div className="pe-2">
-            <button
-              className="text-white poppins-light border-0 bg-transparent"
-              onClick={() => {
-                localStorage.removeItem("phnNo");
-                navigate("/");
-              }}
-            >
-              <LogoutOutlined />
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
       </div>
     </nav>
   );
