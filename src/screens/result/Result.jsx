@@ -20,14 +20,14 @@ function Result() {
   const [downloadLoading, setDownloadLoading] = useState(false);
   const navigate = useNavigate();
 
-  let downloadPromises;
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
       const modalElement = document.getElementById("staticBackdrop");
       const modal = new Modal(modalElement);
       modal.show();
-      downloadPromises = selectedImagesIndex.map(async (imageUrl, index) => {
+      for (let index = 0; index < selectedImagesIndex.length; index++) {
+        const imageUrl = selectedImagesIndex[index];
         const response = await axios.get(imageUrl, {
           responseType: "blob",
         });
@@ -36,14 +36,15 @@ function Result() {
         const tempUrl = window.URL.createObjectURL(imageBlob);
         const link = document.createElement("a");
         link.href = tempUrl;
-        link.setAttribute("download", `image_${index + 1}.jpg`);
+        link.setAttribute("download", `image_${index + 1}.jpg`); 
         document.body.appendChild(link);
         link.click();
         window.URL.revokeObjectURL(tempUrl);
         link.remove();
-      });
-      await Promise.all(downloadPromises);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        await new Promise((resolve) => setTimeout(resolve, 500)); 
+      }
+
       setDownloadLoading(false);
     } catch (error) {
       console.error(error);
