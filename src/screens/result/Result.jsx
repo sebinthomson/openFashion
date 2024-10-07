@@ -10,7 +10,6 @@ import { Modal } from "bootstrap";
 import axios from "axios";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import { useNavigate } from "react-router-dom";
-
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
@@ -22,46 +21,8 @@ function Result() {
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(true);
-  const [downloadedCount, setDownloadedCount] = useState(0);
 
   const navigate = useNavigate();
-
-  // const handleDownload = async () => {
-  //   try {
-  //     setDownloadLoading(true);
-
-  //     const modalElement = document.getElementById("staticBackdrop");
-  //     const modal = new Modal(modalElement);
-  //     modal.show();
-  //     for (let index = 0; index < selectedImagesIndex.length; index++) {
-  //       if (!isDownloading) {
-  //         break;
-  //       }
-  //       const imageUrl = selectedImagesIndex[index];
-  //       const response = await axios.get(imageUrl, {
-  //         responseType: "blob",
-  //       });
-
-  //       const imageBlob = new Blob([response.data]);
-  //       const tempUrl = window.URL.createObjectURL(imageBlob);
-  //       const link = document.createElement("a");
-  //       link.href = tempUrl;
-  //       link.setAttribute("download", `image_${index + 1}.jpg`);
-  //       document.body.appendChild(link);
-  //       link.click();
-  //       window.URL.revokeObjectURL(tempUrl);
-  //       link.remove();
-
-  //       await new Promise((resolve) => setTimeout(resolve, 100));
-  //       setDownloadedCount(index + 1);
-  //     }
-
-  //     setDownloadLoading(false);
-  //     setIsDownloading(true);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleDownload = async () => {
     try {
@@ -83,7 +44,13 @@ function Result() {
       }
 
       const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, "images.zip");
+
+      const name =
+        selectedImagesIndex?.[0]?.split("/")?.slice(-2, -1)?.[0] || "image";
+
+      if (isDownloading) {
+        saveAs(content, `${name}.zip`);
+      }
 
       setDownloadLoading(false);
       setIsDownloading(true);
@@ -266,9 +233,6 @@ function Result() {
                   <div>
                     <div className="spinner-border" role="status">
                       <span className="visually-hidden">Loading...</span>
-                      <span>
-                        {downloadedCount}/{selectedImagesIndex.length}
-                      </span>
                     </div>
                     {/* <div
                       className="spinner-grow spinner-grow-sm me-2"
