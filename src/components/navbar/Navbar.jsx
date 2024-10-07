@@ -17,7 +17,9 @@ function Navbar({ showLogout = false }) {
                 navigate("/");
               }}
             >
-              <i className="bi bi-box-arrow-right"></i>
+              <i
+                className="bi bi-box-arrow-right fs-1"
+              ></i>
             </button>
           </div>
         ) : (
