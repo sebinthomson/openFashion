@@ -56,6 +56,7 @@ function PhoneNumber() {
     try {
       setLoading(true);
       const res = await RegistrationDetailsApi(phnNo);
+      console.log("response", res);
       setLoading(false);
       if (
         res?.image_name &&
@@ -66,7 +67,7 @@ function PhoneNumber() {
       ) {
         navigate("/verify");
         setIsRegisterd(true);
-      } else {
+      } else if (res.error) {
         setIsRegisterd(false);
         navigate("/register");
       }
