@@ -1,4 +1,3 @@
-import { LogoutOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 function Navbar({ showLogout = false }) {
@@ -18,7 +17,7 @@ function Navbar({ showLogout = false }) {
                 navigate("/");
               }}
             >
-              <LogoutOutlined />
+              <i className="bi bi-box-arrow-right"></i>
             </button>
           </div>
         ) : (
