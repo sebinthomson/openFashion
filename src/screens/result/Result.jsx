@@ -18,13 +18,13 @@ function Result() {
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(true);
   const navigate = useNavigate();
 
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
-      setIsDownloading(true);
+
       const modalElement = document.getElementById("staticBackdrop");
       const modal = new Modal(modalElement);
       modal.show();
