@@ -18,15 +18,20 @@ function Result() {
   const [detectedImages, setDetectedImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
 
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
+      setIsDownloading(true);
       const modalElement = document.getElementById("staticBackdrop");
       const modal = new Modal(modalElement);
       modal.show();
       for (let index = 0; index < selectedImagesIndex.length; index++) {
+        if (!isDownloading) {
+          break;
+        }
         const imageUrl = selectedImagesIndex[index];
         const response = await axios.get(imageUrl, {
           responseType: "blob",
@@ -36,16 +41,17 @@ function Result() {
         const tempUrl = window.URL.createObjectURL(imageBlob);
         const link = document.createElement("a");
         link.href = tempUrl;
-        link.setAttribute("download", `image_${index + 1}.jpg`); 
+        link.setAttribute("download", `image_${index + 1}.jpg`);
         document.body.appendChild(link);
         link.click();
         window.URL.revokeObjectURL(tempUrl);
         link.remove();
 
-        await new Promise((resolve) => setTimeout(resolve, 100)); 
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       setDownloadLoading(false);
+      setIsDownloading(false);
     } catch (error) {
       console.error(error);
     }
@@ -246,12 +252,24 @@ function Result() {
                 <></>
               )}
               <div className="py-3 d-flex justify-content-center">
-                <button
-                  className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
-                  data-bs-dismiss="modal"
-                >
-                  Done
-                </button>
+                {downloadLoading ? (
+                  <button
+                    className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
+                    onClick={() => {
+                      setIsDownloading(false);
+                    }}
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                ) : (
+                  <button
+                    className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
+                    data-bs-dismiss="modal"
+                  >
+                    Done
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -68,7 +68,7 @@ function OtpBefore() {
             className="bg-white py-3 px-5 text-black border  poppins-light rounded-0"
             onClick={handleSubmit}
           >
-            Submit
+            Verify OTP <i className="bi bi-arrow-right"></i>{" "}
           </button>
         </div>
       </div>
