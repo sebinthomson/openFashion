@@ -11,6 +11,9 @@ import axios from "axios";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import { useNavigate } from "react-router-dom";
 
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+
 function Result() {
   const { fname, lname, isRegistered, phnNo, email, img } =
     useContext(DetailsContext);
@@ -23,6 +26,43 @@ function Result() {
 
   const navigate = useNavigate();
 
+  // const handleDownload = async () => {
+  //   try {
+  //     setDownloadLoading(true);
+
+  //     const modalElement = document.getElementById("staticBackdrop");
+  //     const modal = new Modal(modalElement);
+  //     modal.show();
+  //     for (let index = 0; index < selectedImagesIndex.length; index++) {
+  //       if (!isDownloading) {
+  //         break;
+  //       }
+  //       const imageUrl = selectedImagesIndex[index];
+  //       const response = await axios.get(imageUrl, {
+  //         responseType: "blob",
+  //       });
+
+  //       const imageBlob = new Blob([response.data]);
+  //       const tempUrl = window.URL.createObjectURL(imageBlob);
+  //       const link = document.createElement("a");
+  //       link.href = tempUrl;
+  //       link.setAttribute("download", `image_${index + 1}.jpg`);
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       window.URL.revokeObjectURL(tempUrl);
+  //       link.remove();
+
+  //       await new Promise((resolve) => setTimeout(resolve, 100));
+  //       setDownloadedCount(index + 1);
+  //     }
+
+  //     setDownloadLoading(false);
+  //     setIsDownloading(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const handleDownload = async () => {
     try {
       setDownloadLoading(true);
@@ -30,28 +70,20 @@ function Result() {
       const modalElement = document.getElementById("staticBackdrop");
       const modal = new Modal(modalElement);
       modal.show();
+
+      const zip = new JSZip();
       for (let index = 0; index < selectedImagesIndex.length; index++) {
-        if (!isDownloading) {
-          break;
-        }
         const imageUrl = selectedImagesIndex[index];
         const response = await axios.get(imageUrl, {
           responseType: "blob",
         });
 
         const imageBlob = new Blob([response.data]);
-        const tempUrl = window.URL.createObjectURL(imageBlob);
-        const link = document.createElement("a");
-        link.href = tempUrl;
-        link.setAttribute("download", `image_${index + 1}.jpg`);
-        document.body.appendChild(link);
-        link.click();
-        window.URL.revokeObjectURL(tempUrl);
-        link.remove();
-
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        setDownloadedCount(index + 1);
+        zip.file(`image_${index + 1}.jpg`, imageBlob);
       }
+
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, "images.zip");
 
       setDownloadLoading(false);
       setIsDownloading(true);
