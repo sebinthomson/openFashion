@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Back({ page }) {
+function Back({ page, home = false }) {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -37,7 +37,9 @@ function Back({ page }) {
           />
         </svg>
       </div>
-      <h1 className="text-white poppins-light ps-4 fs-2">Back</h1>
+      <h1 className="text-white poppins-light ps-4 fs-2">
+        {home ? "Home" : "Back"}
+      </h1>
     </div>
   );
 }

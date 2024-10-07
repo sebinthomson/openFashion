@@ -1,4 +1,4 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
@@ -27,8 +27,8 @@ function OtpBefore() {
     if (check) {
       setErr({ otpError: "Please enter valid otp" });
     } else {
-      if (isRegistered == true){
-        setWithExpiry("phnNo",phnNo,86400000)
+      if (isRegistered == true) {
+        setWithExpiry("phnNo", phnNo, 86400000);
       }
       navigate("/gallery");
     }
