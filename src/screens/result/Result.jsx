@@ -84,6 +84,10 @@ function Result() {
     }
   };
 
+  const handleCancelDownload = () => {
+    if (downloadLoading) setIsDownloading(false);
+  };
+
   useEffect(() => {
     if (isRegistered == false || isRegistered == true) {
       if (!isRegistered) {
@@ -261,9 +265,7 @@ function Result() {
                 {downloadLoading ? (
                   <button
                     className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
-                    onClick={() => {
-                      setIsDownloading(false);
-                    }}
+                    onClick={handleCancelDownload}
                     data-bs-dismiss="modal"
                   >
                     Cancel
