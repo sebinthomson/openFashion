@@ -42,7 +42,7 @@ function Result() {
         window.URL.revokeObjectURL(tempUrl);
         link.remove();
 
-        await new Promise((resolve) => setTimeout(resolve, 500)); 
+        await new Promise((resolve) => setTimeout(resolve, 100)); 
       }
 
       setDownloadLoading(false);
