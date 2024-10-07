@@ -51,7 +51,7 @@ function Result() {
       }
 
       setDownloadLoading(false);
-      setIsDownloading(false);
+      setIsDownloading(true);
     } catch (error) {
       console.error(error);
     }
