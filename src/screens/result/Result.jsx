@@ -19,6 +19,8 @@ function Result() {
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(true);
+  const [downloadedCount, setDownloadedCount] = useState(0);
+
   const navigate = useNavigate();
 
   const handleDownload = async () => {
@@ -48,6 +50,7 @@ function Result() {
         link.remove();
 
         await new Promise((resolve) => setTimeout(resolve, 100));
+        setDownloadedCount(index + 1);
       }
 
       setDownloadLoading(false);
@@ -227,6 +230,9 @@ function Result() {
                   <div>
                     <div className="spinner-border" role="status">
                       <span className="visually-hidden">Loading...</span>
+                      <span>
+                        {downloadedCount}/{selectedImagesIndex.length}
+                      </span>
                     </div>
                     {/* <div
                       className="spinner-grow spinner-grow-sm me-2"
