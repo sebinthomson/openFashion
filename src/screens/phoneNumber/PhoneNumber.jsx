@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
@@ -13,6 +13,7 @@ function PhoneNumber() {
     useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const eventID = localStorage.getItem("eventID");
 
   const handleSelect = (code) => {
     setPhnNoCC(code);
@@ -75,6 +76,10 @@ function PhoneNumber() {
       console.info(error);
     }
   };
+
+  useEffect(() => {
+    if (eventID == null) navigate("/event-id");
+  });
 
   return (
     <div className="row full-height" id="belowroot">

@@ -52,7 +52,7 @@ function Details() {
       }
     }
   };
-  
+
   const handleSubmit = () => {
     if (validateForm()) {
       if (modalRef.current) {
@@ -94,8 +94,13 @@ function Details() {
   };
 
   useEffect(() => {
-    if (phnNo && phnNo.length != 10) {
-      navigate("/");
+    const eventID = localStorage.getItem("eventID");
+    if (eventID != null) {
+      if (phnNo && phnNo.length != 10) {
+        navigate("/");
+      }
+    } else {
+      navigate("/event-id");
     }
   }, [phnNo]);
 

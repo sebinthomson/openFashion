@@ -88,30 +88,35 @@ function Result() {
   };
 
   useEffect(() => {
-    if (isRegistered == false || isRegistered == true) {
-      if (!isRegistered) {
-        if (fname && lname && email && img && phnNo) {
-          const formData = new FormData();
-          formData.append("firstName", fname);
-          formData.append("lastName", lname);
-          formData.append("mobileNumber", phnNo);
-          formData.append("email", email);
-          formData.append("imageFile", img);
-          handleUploadApi(formData, phnNo);
+    const eventID = localStorage.getItem("eventID");
+    if (eventID != null) {
+      if (isRegistered == false || isRegistered == true) {
+        if (!isRegistered) {
+          if (fname && lname && email && img && phnNo) {
+            const formData = new FormData();
+            formData.append("firstName", fname);
+            formData.append("lastName", lname);
+            formData.append("mobileNumber", phnNo);
+            formData.append("email", email);
+            formData.append("imageFile", img);
+            handleUploadApi(formData, phnNo);
+          }
+        } else {
+          if (phnNo) {
+            setWithExpiry("phnNo", phnNo, 86400000);
+            fetchImages(phnNo);
+          }
         }
       } else {
-        if (phnNo) {
-          setWithExpiry("phnNo", phnNo, 86400000);
-          fetchImages(phnNo);
+        const phnNoLS = getWithExpiry("phnNo");
+        if (phnNoLS != null) {
+          fetchImages(phnNoLS);
+        } else {
+          navigate("/");
         }
       }
     } else {
-      const phnNoLS = getWithExpiry("phnNo");
-      if (phnNoLS != null) {
-        fetchImages(phnNoLS);
-      } else {
-        navigate("/");
-      }
+      navigate("/event-id");
     }
   }, [phnNo]);
 

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "../../components/carousel/Carousel";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   config_heading,
   config_subheading,
@@ -18,7 +18,12 @@ function Home() {
   const handleRegister = () => {
     navigate("/signup");
   };
-  
+
+  useEffect(() => {
+    const eventID = localStorage.getItem("eventID")
+    if (eventID == null) navigate("/event-id");
+  });
+
   return (
     <div className="row full-height" id="belowroot">
       <Navbar />

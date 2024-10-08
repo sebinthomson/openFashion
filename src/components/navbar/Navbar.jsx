@@ -13,6 +13,7 @@ function Navbar({ showLogout = false }) {
             <button
               className="text-white poppins-light border-0 bg-transparent"
               onClick={() => {
+                localStorage.removeItem("eventID");
                 localStorage.removeItem("phnNo");
                 navigate("/");
               }}

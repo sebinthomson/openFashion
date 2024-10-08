@@ -5,7 +5,7 @@ function Back({ page, home = false }) {
 
   const handleBack = () => {
     if (page == "/") {
-      localStorage.removeItem("phnNo");
+      localStorage.removeItem("eventID");
     }
     if (page?.length) {
       navigate(page);
