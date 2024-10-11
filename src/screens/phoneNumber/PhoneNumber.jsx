@@ -68,7 +68,7 @@ function PhoneNumber() {
       ) {
         navigate("/verify");
         setIsRegisterd(true);
-      } else if (res.error) {
+      } else if (res.error == "Mobile number not registered") {
         setIsRegisterd(false);
         navigate("/register");
       }

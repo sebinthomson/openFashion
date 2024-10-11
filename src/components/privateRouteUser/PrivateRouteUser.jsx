@@ -3,20 +3,16 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { getWithExpiry } from "../../utils/localstorage";
 
 const PrivateRouteUser = ({ children }) => {
-  const port = import.meta.env.VITE_EVENT_ID;
   const navigate = useNavigate();
   useEffect(() => {
     const eventId = localStorage.getItem("eventID");
+    console.log("eventId", eventId);
     if (eventId != null) {
-      if (eventId == port) {
-        const userValue = getWithExpiry("phnNo");
-        if (userValue) {
-          navigate("/gallery");
-        } else {
-          navigate("/");
-        }
+      const userValue = getWithExpiry("phnNo");
+      if (userValue) {
+        navigate("/gallery");
       } else {
-        navigate("/event-id");
+        navigate("/");
       }
     } else {
       navigate("/event-id");

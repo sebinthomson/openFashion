@@ -5,7 +5,9 @@ import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { useNavigate } from "react-router-dom";
 import { getWithExpiry } from "../../utils/localstorage";
-const eventId = import.meta.env.VITE_EVENT_ID;
+import ValidEventId from "../../api/validEventId/ValidEventId";
+
+export const portno = "8122"
 
 function PortNumber() {
   const navigate = useNavigate();
@@ -30,19 +32,32 @@ function PortNumber() {
     }
   };
 
+  // const fetchEventDetails = () => {
+  //   try {
+  //     if (port == eventId) {
+  //       localStorage.setItem("eventID", port);
+  //       const phoneNumber = getWithExpiry("phnNo");
+  //       if (phoneNumber != null) {
+  //         navigate("/gallery");
+  //       } else {
+  //         navigate("/");
+  //       }
+  //     } else {
+  //       setError("Invalid Event ID");
+  //     }
+  //   } catch (error) {
+  //     console.info(error);
+  //   }
+  // };
+
   const fetchEventDetails = () => {
     try {
-      if (port == eventId) {
-        localStorage.setItem("eventID", port);
-        const phoneNumber = getWithExpiry("phnNo");
-        if (phoneNumber != null) {
-          navigate("/gallery");
-        } else {
-          navigate("/");
-        }
-      } else {
-        setError("Invalid Event ID");
+      setLoading(true);
+      const res = ValidEventId(port);
+      if (res.message == "Valid Api") {
+        localStorage.getItem("eventID", port);
       }
+      setLoading(false);
     } catch (error) {
       console.info(error);
     }
