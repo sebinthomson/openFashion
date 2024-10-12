@@ -58,13 +58,9 @@ function PortNumber() {
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={"/"} />
-        <div className="pt-4">
-          <h3 className="text-white miama-font fs-1">Event ID</h3>
-        </div>
         <div>
           <h6 className="text-white poppins-light lh-base">
-            Enter your event ID.....
+            Please enter the event ID
           </h6>
         </div>
         <div className="input-group flex-nowrap pt-3 d-flex flex-column">
