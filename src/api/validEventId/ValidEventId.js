@@ -1,14 +1,15 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_BASEURL;
+
 export default async function ValidEventId(eventId) {
   try {
-    console.log(eventId);
-    const res = await axios.get("/api/check-api-status", {
-      headers: { "Content-Type": "application/json", "x-user-port": eventId },
+    const res = await axios.get(`${baseURL}:${eventId}/check-api-status`, {
+      headers: { "Content-Type": "application/json" },
     });
-console.log("res",res)
     return res.data;
   } catch (error) {
     console.error("API error", error);
+    return {};
   }
 }

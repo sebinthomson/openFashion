@@ -23,7 +23,8 @@ function Details() {
   const modalRef = useRef(null);
   const [tAndC] = useState(config_termsconditions);
   const navigate = useNavigate();
-
+  const eventID = localStorage.getItem("eventID");
+  
   const handleInput = (key, e) => {
     const value = e.target.value;
     if (key === "fName") {
@@ -94,7 +95,6 @@ function Details() {
   };
 
   useEffect(() => {
-    const eventID = localStorage.getItem("eventID");
     if (eventID != null) {
       if (phnNo && phnNo.length != 10) {
         navigate("/");

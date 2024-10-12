@@ -1,16 +1,20 @@
 import axios from "axios";
 
-export default async function RegistrationDetailsApi(mNumber) {
+const baseURL = import.meta.env.VITE_API_BASEURL;
+
+export default async function RegistrationDetailsApi(eventId, mNumber) {
   try {
-    const res = await axios.get("/api/registration-details", {
+    const res = await axios.get(`${baseURL}:${eventId}/registration-details`, {
       params: {
         mobile_number: mNumber,
       },
       headers: { "Content-Type": "application/json" },
     });
-
+    console.log("response", res);
     return res.data;
   } catch (error) {
-    console.error("registration details api error", error);
+    if (error?.response?.data?.message != "Mobile number not registered")
+      console.error("registration details api error", error);
+    return error.response.data;
   }
 }

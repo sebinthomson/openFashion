@@ -21,8 +21,8 @@ function Result() {
   const [loading, setLoading] = useState(true);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(true);
-
   const navigate = useNavigate();
+  const eventID = localStorage.getItem("eventID");
 
   const handleDownload = async () => {
     try {
@@ -61,14 +61,14 @@ function Result() {
 
   const fetchImages = async (phnNo) => {
     setLoading(true);
-    const res = await DetectedFaceApi(phnNo);
+    const res = await DetectedFaceApi(eventID, phnNo);
     setDetectedImages(res);
     setLoading(false);
   };
 
   const handleUploadApi = async (formData, phnNo) => {
     try {
-      const res = await UploadApi(formData);
+      const res = await UploadApi(eventID, formData);
       if (
         res.message == "File successfully uploaded" ||
         res.message == "Mobile number already registered"
@@ -88,7 +88,6 @@ function Result() {
   };
 
   useEffect(() => {
-    const eventID = localStorage.getItem("eventID");
     if (eventID != null) {
       if (isRegistered == false || isRegistered == true) {
         if (!isRegistered) {

@@ -1,8 +1,10 @@
 import axios from "axios";
 
-export default async function UploadApi(formData) {
+const baseURL = import.meta.env.VITE_API_BASEURL;
+
+export default async function UploadApi(eventId, formData) {
   try {
-    const res = await axios.post("/api/upload", formData, {
+    const res = await axios.post(`${baseURL}:${eventId}/upload`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

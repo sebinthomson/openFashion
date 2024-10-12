@@ -56,8 +56,7 @@ function PhoneNumber() {
   const fetchRegistrationDetails = async () => {
     try {
       setLoading(true);
-      const res = await RegistrationDetailsApi(phnNo);
-      console.log("response", res);
+      const res = await RegistrationDetailsApi(eventID, phnNo);
       setLoading(false);
       if (
         res?.image_name &&

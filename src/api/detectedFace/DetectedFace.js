@@ -1,8 +1,10 @@
 import axios from "axios";
 
-export default async function DetectedFaceApi(mNumber) {
+const baseURL = import.meta.env.VITE_API_BASEURL;
+
+export default async function DetectedFaceApi(eventId, mNumber) {
   try {
-    const res = await axios.get("/api/detected-faces", {
+    const res = await axios.get(`${baseURL}:${eventId}/detected-faces`, {
       params: {
         mobile_number: mNumber,
       },

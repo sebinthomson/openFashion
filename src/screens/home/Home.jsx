@@ -8,11 +8,13 @@ import {
   config_subheading,
   config_description,
 } from "../../../config";
+import { getWithExpiry } from "../../utils/localstorage";
 
 function Home() {
   const [heading, setHeading] = useState(config_heading);
   const [subHeading, setSubHeading] = useState(config_subheading);
   const [description, setDescription] = useState(config_description);
+  const eventID = localStorage.getItem("eventID")
 
   const navigate = useNavigate();
   const handleRegister = () => {
@@ -20,8 +22,8 @@ function Home() {
   };
 
   useEffect(() => {
-    const eventID = localStorage.getItem("eventID")
     if (eventID == null) navigate("/event-id");
+    const phnNo = getWithExpiry('phnNo~')
   });
 
   return (
