@@ -10,7 +10,6 @@ export default async function RegistrationDetailsApi(eventId, mNumber) {
       },
       headers: { "Content-Type": "application/json" },
     });
-    console.log("response", res);
     return res.data;
   } catch (error) {
     if (error?.response?.data?.message != "Mobile number not registered")
