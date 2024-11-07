@@ -13,7 +13,7 @@ function Back({ page, home = false }) {
   };
   return (
     <div className="d-flex flex-row align-items-center" onClick={handleBack}>
-      <div>
+      <div style={{ paddingBottom: "1px" }}>
         <svg
           width="27"
           height="22"
@@ -36,9 +36,11 @@ function Back({ page, home = false }) {
           />
         </svg>
       </div>
-      <h1 className="text-white poppins-light ps-4 fs-2">
-        {home ? "Home" : "Back"}
-      </h1>
+      <div>
+        <h1 className="text-white poppins-light ps-4 fs-2 p-0 m-0">
+          {home ? "Home" : "Back"}
+        </h1>
+      </div>
     </div>
   );
 }

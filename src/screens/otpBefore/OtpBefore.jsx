@@ -125,7 +125,7 @@ function OtpBefore() {
               className="bg-white py-3 px-3 text-black border poppins-light rounded-0"
               onClick={() => {
                 if (resendCooldown === 0) {
-                  // getOTP()
+                  getOTP()
                 }
               }}
               disabled={resendCooldown > 0}

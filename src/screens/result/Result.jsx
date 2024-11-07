@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
@@ -124,9 +123,7 @@ function Result() {
       <Navbar showLogout={true} />
       <div
         className="row w-100 bg-black px-3 py-4 gap-2 m-0"
-        // style={{ maxWidth: "100vw" }}
       >
-        <Back page={"/"} home={true} />
         {loading ? (
           <>
             <div className="pt-4">

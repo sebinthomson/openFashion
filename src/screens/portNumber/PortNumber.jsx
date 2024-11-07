@@ -37,7 +37,7 @@ function PortNumber() {
       const res = await ValidEventId(port);
       if (res.message == "Valid Api") {
         localStorage.setItem("eventID", port);
-        navigate("/gallery");
+        navigate("/");
       } else {
         setError("Invalid Event ID");
       }
