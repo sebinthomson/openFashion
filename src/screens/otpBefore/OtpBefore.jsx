@@ -38,7 +38,7 @@ function OtpBefore() {
   };
 
   const getOTP = async () => {
-    const res = await GenerateOTPApi(eventID, phnNo);
+    // const res = await GenerateOTPApi(eventID, phnNo);
     if (res?.message === "OTP generated and sent successfully") {
       setMsg("OTP generated successfully");
       setCountdown(600); 
@@ -48,6 +48,8 @@ function OtpBefore() {
       } else if (resendTime === 120) {
         setResendTime(300); 
       }
+    }else{
+      setErr({ otpError: "Error generating OTP" });
     }
   };
 

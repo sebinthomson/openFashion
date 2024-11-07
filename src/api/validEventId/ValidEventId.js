@@ -10,6 +10,6 @@ export default async function ValidEventId(eventId) {
     return res.data;
   } catch (error) {
     console.error("API error", error);
-    return {};
+    return {message:"error"};
   }
 }

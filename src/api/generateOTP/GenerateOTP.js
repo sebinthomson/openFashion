@@ -14,6 +14,6 @@ export default async function GenerateOTPApi(eventId, mobileNumber) {
     return res.data;
   } catch (error) {
     console.error("detected-faces api error", error);
-    return error.response.data;
+    return {message:"error"}
   }
 }

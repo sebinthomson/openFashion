@@ -70,6 +70,8 @@ function PhoneNumber() {
       } else if (res.error == "Mobile number not registered") {
         setIsRegisterd(false);
         navigate("/register");
+      }else{
+        setErrors({phnNo:"Error while login/register"})
       }
     } catch (error) {
       console.info(error);
