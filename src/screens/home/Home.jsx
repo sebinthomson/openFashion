@@ -28,7 +28,7 @@ function Home() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar />
+      <Navbar showLogout={true}/>
       <Carousel />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <div className="d-flex flex-column flex-md-row">

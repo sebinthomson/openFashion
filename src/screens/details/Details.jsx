@@ -110,7 +110,7 @@ function Details() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar />
+      <Navbar showLogout={true}/>
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back page={"/signup"} />
         <div className="pt-4">
