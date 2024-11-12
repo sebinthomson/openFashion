@@ -21,7 +21,7 @@ function Result() {
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(true);
   const navigate = useNavigate();
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
 
   const handleDownload = async () => {
     try {
@@ -121,9 +121,7 @@ function Result() {
   return (
     <div className="row full-height" id="belowroot">
       <Navbar showLogout={true} />
-      <div
-        className="row w-100 bg-black px-3 py-4 gap-2 m-0"
-      >
+      <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         {loading ? (
           <>
             <div className="pt-4">

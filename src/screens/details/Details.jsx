@@ -6,6 +6,7 @@ import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import { useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
+import { getWithExpiry } from "../../utils/localstorage";
 function Details() {
   const {
     fname,
@@ -23,7 +24,7 @@ function Details() {
   const modalRef = useRef(null);
   const [tAndC] = useState(config_termsconditions);
   const navigate = useNavigate();
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
   
   const handleInput = (key, e) => {
     const value = e.target.value;

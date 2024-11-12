@@ -14,7 +14,7 @@ function Home() {
   const [heading, setHeading] = useState(config_heading);
   const [subHeading, setSubHeading] = useState(config_subheading);
   const [description, setDescription] = useState(config_description);
-  const eventID = localStorage.getItem("eventID")
+  const eventID = getWithExpiry("eventID");
 
   const navigate = useNavigate();
   const handleRegister = () => {
@@ -23,12 +23,11 @@ function Home() {
 
   useEffect(() => {
     if (eventID == null) navigate("/event-id");
-    const phnNo = getWithExpiry('phnNo~')
   });
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar showLogout={true}/>
+      <Navbar showLogout={true} />
       <Carousel />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <div className="d-flex flex-column flex-md-row">

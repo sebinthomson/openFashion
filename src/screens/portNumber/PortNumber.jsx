@@ -2,9 +2,9 @@ import { useState } from "react";
 import "react-phone-input-2/lib/style.css";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
-import Back from "../../components/back/Back";
 import { useNavigate } from "react-router-dom";
 import ValidEventId from "../../api/validEventId/ValidEventId";
+import { setWithExpiry } from "../../utils/localstorage";
 
 export const portno = "8122";
 
@@ -36,7 +36,7 @@ function PortNumber() {
       setLoading(true);
       const res = await ValidEventId(port);
       if (res.message == "Valid Api") {
-        localStorage.setItem("eventID", port);
+        setWithExpiry("eventID", port, 86400000);
         navigate("/");
       } else {
         setError("Invalid Event ID");

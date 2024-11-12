@@ -5,7 +5,7 @@ import Navbar from "../../components/navbar/Navbar";
 import { OTPInput } from "../../components/otpInput/OtpInput";
 import { useContext, useEffect, useState } from "react";
 import { DetailsContext } from "../../contexts/DetailsContext";
-import { setWithExpiry } from "../../utils/localstorage";
+import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 import GenerateOTPApi from "../../api/generateOTP/GenerateOTP";
 import ValidateOTPApi from "../../api/validateOTP/validateOTP";
 
@@ -18,7 +18,7 @@ function OtpBefore() {
   const [countdown, setCountdown] = useState(600);
   const [resendCooldown, setResendCooldown] = useState(0);
   const [resendTime, setResendTime] = useState(60);
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
 
   const handleSubmit = async () => {
     let check = true;

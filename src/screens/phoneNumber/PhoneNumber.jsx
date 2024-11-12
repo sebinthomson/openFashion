@@ -6,6 +6,7 @@ import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import { useNavigate } from "react-router-dom";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
+import { getWithExpiry } from "../../utils/localstorage";
 
 function PhoneNumber() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ function PhoneNumber() {
     useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
 
   const handleSelect = (code) => {
     setPhnNoCC(code);
@@ -70,8 +71,8 @@ function PhoneNumber() {
       } else if (res.error == "Mobile number not registered") {
         setIsRegisterd(false);
         navigate("/register");
-      }else{
-        setErrors({phnNo:"Error while login/register"})
+      } else {
+        setErrors({ phnNo: "Error while login/register" });
       }
     } catch (error) {
       console.info(error);
@@ -84,7 +85,7 @@ function PhoneNumber() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar showLogout={true}/>
+      <Navbar showLogout={true} />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back page={"/"} />
         <div className="pt-4">
