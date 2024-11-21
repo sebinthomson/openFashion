@@ -35,9 +35,9 @@ function Home() {
           }
         );
         const profileData = await response.json();
-        const userEmail = profileData.email;
-        const firstName = profileData.given_name;
-        const lastName = profileData.family_name;
+        const userEmail = profileData?.email;
+        const firstName = profileData?.given_name;
+        const lastName = profileData?.family_name || "";
         setEmail(userEmail);
         setFName(firstName);
         setLName(lastName);

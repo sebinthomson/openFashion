@@ -125,7 +125,7 @@ function Details() {
     <div className="row full-height" id="belowroot">
       <Navbar />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <Back page={"/signup"} />
+        <Back page={"/"} />
         <div className="pt-4">
           <h3 className="text-white miama-font fs-1">Fill the details</h3>
         </div>
