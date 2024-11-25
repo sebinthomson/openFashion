@@ -11,6 +11,7 @@ import {
 import { useGoogleLogin } from "@react-oauth/google";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
+import { getWithExpiry } from "../../utils/localstorage";
 
 function Home() {
   const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
@@ -19,7 +20,7 @@ function Home() {
   const [subHeading, setSubHeading] = useState(config_subheading);
   const [description, setDescription] = useState(config_description);
   const [error, setError] = useState("");
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
 
   const navigate = useNavigate();
 

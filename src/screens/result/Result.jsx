@@ -23,7 +23,7 @@ function Result() {
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(true);
   const navigate = useNavigate();
-  const eventID = localStorage.getItem("eventID");
+  const eventID = getWithExpiry("eventID");
 
   const handleDownload = async () => {
     try {
