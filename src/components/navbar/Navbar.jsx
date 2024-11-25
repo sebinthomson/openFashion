@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 function Navbar({ showLogout = false }) {
   const {
-    setIsRegisterd,
+    setIsRegistered,
     setImg,
     setFName,
     setLName,
@@ -13,6 +13,18 @@ function Navbar({ showLogout = false }) {
     setEmail,
   } = useContext(DetailsContext);
   const navigate = useNavigate();
+  const handleBack = () => {
+    setIsRegistered("");
+    setImg(false);
+    setFName("");
+    setLName("");
+    setPhnNoCC("+91");
+    setPhnNo("");
+    setEmail("");
+    localStorage.removeItem("eventID");
+    localStorage.removeItem("phnNo");
+    navigate("/");
+  };
   return (
     <nav className="navbar navbar-expand-lg bg-black header">
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -23,18 +35,7 @@ function Navbar({ showLogout = false }) {
           <div className="pe-2">
             <button
               className="text-white poppins-light border-0 bg-transparent"
-              onClick={() => {
-                setIsRegisterd("");
-                setImg(false);
-                setFName("");
-                setLName("");
-                setPhnNoCC("+91");
-                setPhnNo("");
-                setEmail("");
-                localStorage.removeItem("eventID");
-                localStorage.removeItem("phnNo");
-                navigate("/");
-              }}
+              onClick={handleBack}
             >
               <i className="bi bi-box-arrow-right fs-1"></i>
             </button>
