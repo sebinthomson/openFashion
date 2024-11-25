@@ -123,7 +123,7 @@ function Details() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar />
+      <Navbar showLogout={true} />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back page={"/"} />
         <div className="pt-4">
@@ -139,10 +139,11 @@ function Details() {
             type="text"
             className={`border-bottom-line text-white poppins-light ${
               errors.fName ? "is-invalid" : ""
-            }`}
+            } disabled-input`}
             placeholder="First Name"
             onChange={(e) => handleInput("fName", e)}
             value={fname}
+            disabled={true}
           />
           {errors.fName && <div className="text-danger">{errors.fName}</div>}
         </div>
@@ -151,10 +152,11 @@ function Details() {
             type="text"
             className={`border-bottom-line text-white poppins-light ${
               errors.lName ? "is-invalid" : ""
-            }`}
+            } disabled-input`}
             placeholder="Last Name"
             onChange={(e) => handleInput("lName", e)}
             value={lname}
+            disabled={true}
           />
           {errors.lName && <div className="text-danger">{errors.lName}</div>}
         </div>
@@ -163,11 +165,12 @@ function Details() {
             type="email"
             className={`border-bottom-line text-white poppins-light ${
               errors.email ? "is-invalid" : ""
-            }`}
+            } disabled-input`}
             placeholder="Email"
             onChange={(e) => handleInput("email", e)}
             value={email}
             readOnly
+            disabled={true}
           />
           {errors.email && <div className="text-danger">{errors.email}</div>}
         </div>

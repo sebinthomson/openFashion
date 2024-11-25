@@ -10,9 +10,10 @@ import {
 } from "../../../config";
 import { useGoogleLogin } from "@react-oauth/google";
 import { DetailsContext } from "../../contexts/DetailsContext";
+import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
 
 function Home() {
-  const { setFName, setLName, setEmail, setIsRegistered } =
+  const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
     useContext(DetailsContext);
   const [heading, setHeading] = useState(config_heading);
   const [subHeading, setSubHeading] = useState(config_subheading);
@@ -41,8 +42,15 @@ function Home() {
         setEmail(userEmail);
         setFName(firstName);
         setLName(lastName);
-        setIsRegistered(false);
-        navigate("/register");
+        const reg_details = await RegistrationDetailsApi(eventID, userEmail);
+        if (reg_details?.error == "Registration not found") {
+          setIsRegistered(false);
+          navigate("/register");
+        }else{
+          setPhnNo(reg_details.mobile_number)
+          setIsRegistered(true)
+          navigate("/gallery");
+        }
       } catch (error) {
         console.error("Failed to fetch user profile info:", error);
       }
@@ -58,7 +66,7 @@ function Home() {
 
   return (
     <div className="row full-height" id="belowroot">
-      <Navbar />
+      <Navbar showLogout={true} />
       <Carousel />
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <div className="d-flex flex-column flex-md-row">

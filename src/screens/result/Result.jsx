@@ -12,6 +12,7 @@ import { DetailsContext } from "../../contexts/DetailsContext";
 import { useNavigate } from "react-router-dom";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import Loader from "../../components/loader/Loader";
 
 function Result() {
   const { fname, lname, isRegistered, phnNo, email, img } =
@@ -137,17 +138,7 @@ function Result() {
                 Fetching Your Result
               </h6>
             </div>
-            <div className="ps-2"> </div>
-            <div className="container">
-              <div className="loadingspinner">
-                <div id="square1"></div>
-                <div id="square2"></div>
-                <div id="square3"></div>
-                <div id="square4"></div>
-                <div id="square5"></div>
-              </div>
-            </div>
-            <div className="bg-black" style={{ height: "45px" }}></div>
+            <Loader />
           </>
         ) : (
           <>
