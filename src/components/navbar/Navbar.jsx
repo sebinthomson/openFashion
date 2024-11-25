@@ -14,7 +14,7 @@ function Navbar({ showLogout = false }) {
   } = useContext(DetailsContext);
   const navigate = useNavigate();
   const handleBack = () => {
-    setIsRegistered("");
+    setIsRegistered(null);
     setImg(false);
     setFName("");
     setLName("");
