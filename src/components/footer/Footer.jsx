@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
+import Loader from "../loader/Loader";
 
-function Footer() {
+function Footer({ loader = false }) {
   const [balanceHeight, setBalanceHeight] = useState(0);
   const balanceRef = useRef(0);
   useEffect(() => {
@@ -9,14 +10,16 @@ function Footer() {
       const rect = divElement.getBoundingClientRect();
       const divHeight = rect.height;
       const screenHeight = window.innerHeight;
-      balanceRef.current = screenHeight - divHeight ;
+      balanceRef.current = screenHeight - divHeight;
       setBalanceHeight(balanceRef.current);
     }
-  },[]);
-  
+  }, []);
+
   return (
     <>
-      <div className="bg-black " style={{ height: balanceHeight }}></div>
+      <div className="bg-black " style={{ height: balanceHeight }}>
+        {loader?<Loader/>:<></>}
+      </div>
       <div className="footer-content row w-100 bg-dark pt-4 m-0">
         <div>
           <div>

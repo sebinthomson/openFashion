@@ -12,6 +12,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
 import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
+import ValidEventId from "../../api/validEventId/ValidEventId";
 
 function Home() {
   const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
@@ -20,6 +21,7 @@ function Home() {
   const [subHeading, setSubHeading] = useState(config_subheading);
   const [description, setDescription] = useState(config_description);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const eventID = getWithExpiry("eventID");
 
   const navigate = useNavigate();
@@ -63,11 +65,26 @@ function Home() {
     },
   });
 
+  const fetchEventDetails = async (port) => {
+    try {
+      const res = await ValidEventId(port);
+      setLoading(false);
+      if (res.message == "Valid Api") {
+        setWithExpiry("eventID", port, 86400000);
+      } else {
+        navigate("/404");
+      }
+    } catch (error) {
+      console.info(error);
+    }
+  };
+
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash != "") {
-      setWithExpiry("eventID", hash, 86400000);
+      fetchEventDetails(hash);
     } else if (eventID == null) {
+      setLoading(false);
       navigate("/event-id");
     }
   }, [navigate, eventID]);
@@ -75,29 +92,37 @@ function Home() {
   return (
     <div className="row full-height" id="belowroot">
       <Navbar showLogout={true} />
-      <Carousel />
-      <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
-        <div className="d-flex flex-column flex-md-row">
-          <h1 className="text-white miama-font">{heading[0]}</h1>
-          <h1 className="text-white miama-font pt-2">{heading[1]}</h1>
-        </div>
-        <div className="pt-2">
-          <h3 className="text-white poppins-light">{subHeading}</h3>
-        </div>
-        <div>
-          <h6 className="text-white poppins-light lh-base">{description} </h6>
-        </div>
-        <div className="py-3">
-          <button
-            className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
-            onClick={handleRegister}
-          >
-            Register for images
-          </button>
-        </div>
-        {error && <div className="text-danger">{error}</div>}
-      </div>
-      <Footer />
+      {loading ? (
+        <></>
+      ) : (
+        <>
+          <Carousel />
+          <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
+            <div className="d-flex flex-column flex-md-row">
+              <h1 className="text-white miama-font">{heading[0]}</h1>
+              <h1 className="text-white miama-font pt-2">{heading[1]}</h1>
+            </div>
+            <div className="pt-2">
+              <h3 className="text-white poppins-light">{subHeading}</h3>
+            </div>
+            <div>
+              <h6 className="text-white poppins-light lh-base">
+                {description}{" "}
+              </h6>
+            </div>
+            <div className="py-3">
+              <button
+                className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
+                onClick={handleRegister}
+              >
+                Register for images
+              </button>
+            </div>
+            {error && <div className="text-danger">{error}</div>}
+          </div>
+        </>
+      )}
+      <Footer loader={loading} />
     </div>
   );
 }
