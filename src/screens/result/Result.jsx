@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import Back from "../../components/back/Back";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";

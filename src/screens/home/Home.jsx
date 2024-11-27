@@ -11,7 +11,7 @@ import {
 import { useGoogleLogin } from "@react-oauth/google";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
-import { getWithExpiry } from "../../utils/localstorage";
+import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 
 function Home() {
   const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
@@ -47,10 +47,12 @@ function Home() {
         if (reg_details?.error == "Registration not found") {
           setIsRegistered(false);
           navigate("/register");
-        }else{
-          setPhnNo(reg_details.mobile_number)
-          setIsRegistered(true)
+        } else if (reg_details?.mobile_number) {
+          setPhnNo(reg_details.mobile_number);
+          setIsRegistered(true);
           navigate("/gallery");
+        } else {
+          setError("Authentication Failed");
         }
       } catch (error) {
         console.error("Failed to fetch user profile info:", error);
@@ -62,7 +64,12 @@ function Home() {
   });
 
   useEffect(() => {
-    if (eventID == null) navigate("/event-id");
+    const hash = window.location.hash.slice(1);
+    if (hash != "") {
+      setWithExpiry("eventID", hash, 86400000);
+    } else if (eventID == null) {
+      navigate("/event-id");
+    }
   }, [navigate, eventID]);
 
   return (
