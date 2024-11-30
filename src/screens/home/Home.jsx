@@ -86,6 +86,8 @@ function Home() {
     } else if (eventID == null) {
       setLoading(false);
       navigate("/event-id");
+    }else{
+      setLoading(false)
     }
   }, [navigate, eventID]);
 
