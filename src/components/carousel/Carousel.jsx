@@ -2,14 +2,7 @@ import React, { useEffect } from "react";
 import "./carousel.css";
 import { Carousel } from "bootstrap";
 
-function CarouselComponent() {
-  const images = [
-    "/images/1.jpg",
-    "/images/2.jpg",
-    "/images/3.jpeg",
-    "/images/4.jpg",
-  ];
-
+function CarouselComponent({ images }) {
   useEffect(() => {
     const carouselElement = document.getElementById("carouselExampleInterval");
     const carousel = new Carousel(carouselElement, {
@@ -40,24 +33,28 @@ function CarouselComponent() {
           </div>
         ))}
       </div>
-      <div className="d-flex justify-content-center">
-        <button
-          className="custom-control-prev me-5"
-          type="button"
-          data-bs-target="#carouselExampleInterval"
-          data-bs-slide="prev"
-        >
-          <span className="bi bi-arrow-left-circle custom-icon"></span>
-        </button>
-        <button
-          className="custom-control-next ms-5"
-          type="button"
-          data-bs-target="#carouselExampleInterval"
-          data-bs-slide="next"
-        >
-          <span className="bi bi-arrow-right-circle custom-icon"></span>
-        </button>
-      </div>
+      {images?.length > 1 ? (
+        <div className="d-flex justify-content-center">
+          <button
+            className="custom-control-prev me-5"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="prev"
+          >
+            <span className="bi bi-arrow-left-circle custom-icon"></span>
+          </button>
+          <button
+            className="custom-control-next ms-5"
+            type="button"
+            data-bs-target="#carouselExampleInterval"
+            data-bs-slide="next"
+          >
+            <span className="bi bi-arrow-right-circle custom-icon"></span>
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

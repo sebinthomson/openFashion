@@ -4,7 +4,7 @@ import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import Back from "../../components/back/Back";
 import { DetailsContext } from "../../contexts/DetailsContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { config_termsconditions } from "../../../config";
 import { getWithExpiry } from "../../utils/localstorage";
 function Details() {
@@ -28,6 +28,9 @@ function Details() {
   const [tAndC] = useState(config_termsconditions);
   const navigate = useNavigate();
   const eventID = getWithExpiry("eventID");
+
+  const location = useLocation();
+  const { userExist } = location.state || {};
 
   const handleInput = (key, e) => {
     const value = e.target.value;
@@ -112,6 +115,9 @@ function Details() {
 
   useEffect(() => {
     if (eventID == null) navigate("/event-id");
+    if (userExist){
+      setErrors({phnNo:"Mobile Number already exists"})
+    }
   }, [eventID]);
 
   const handleAccept = () => {

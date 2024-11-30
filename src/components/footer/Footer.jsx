@@ -18,7 +18,7 @@ function Footer({ loader = false }) {
   return (
     <>
       <div className="bg-black " style={{ height: balanceHeight }}>
-        {loader?<Loader/>:<></>}
+        {/* {loader?<Loader/>:<></>} */}
       </div>
       <div className="footer-content row w-100 bg-dark pt-4 m-0">
         <div>

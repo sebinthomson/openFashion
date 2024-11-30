@@ -13,18 +13,41 @@ import { DetailsContext } from "../../contexts/DetailsContext";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
 import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 import ValidEventId from "../../api/validEventId/ValidEventId";
+import GetEventDetails from "../../api/getEventDetails/GetEventDetails";
 
 function Home() {
   const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
     useContext(DetailsContext);
-  const [heading, setHeading] = useState(config_heading);
+  const [heading, setHeading] = useState(["A Celebration of Love"]);
   const [subHeading, setSubHeading] = useState(config_subheading);
   const [description, setDescription] = useState(config_description);
+  const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const eventID = getWithExpiry("eventID");
 
   const navigate = useNavigate();
+
+  function splitHeading(heading, maxLength) {
+    const words = heading.split(" ");
+    const result = [];
+    let currentLine = "";
+
+    for (const word of words) {
+      if ((currentLine + word).length <= maxLength) {
+        currentLine += (currentLine ? " " : "") + word;
+      } else {
+        result.push(currentLine);
+        currentLine = word;
+      }
+    }
+
+    if (currentLine) {
+      result.push(currentLine);
+    }
+
+    return result;
+  }
 
   const handleRegister = useGoogleLogin({
     onSuccess: async (credentialResponse) => {
@@ -65,6 +88,14 @@ function Home() {
     },
   });
 
+  const fetchEvent = async (port) => {
+    const eventDetails = await GetEventDetails(port);
+    setHeading(splitHeading(eventDetails.main_heading, 21));
+    setSubHeading(eventDetails.subheading);
+    setDescription(eventDetails.description);
+    setImages([eventDetails.cover_image]);
+  };
+
   const fetchEventDetails = async (port) => {
     try {
       const res = await ValidEventId(port);
@@ -83,11 +114,13 @@ function Home() {
     const hash = window.location.hash.slice(1);
     if (hash != "") {
       fetchEventDetails(hash);
+      fetchEvent(hash);
     } else if (eventID == null) {
       setLoading(false);
       navigate("/event-id");
-    }else{
-      setLoading(false)
+    } else {
+      fetchEvent(eventID);
+      setLoading(false);
     }
   }, [navigate, eventID]);
 
@@ -98,12 +131,22 @@ function Home() {
         <></>
       ) : (
         <>
-          <Carousel />
+          <Carousel images={images} />
           <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
             <div className="d-flex flex-column flex-md-row">
-              <h1 className="text-white miama-font">{heading[0]}</h1>
-              <h1 className="text-white miama-font pt-2">{heading[1]}</h1>
+              {heading.length &&
+                heading.map((head, index) => (
+                  <h1
+                    key={index}
+                    className={`text-white miama-font ${
+                      index === 0 ? "" : "pt-2"
+                    }`}
+                  >
+                    {head}
+                  </h1>
+                ))}
             </div>
+
             <div className="pt-2">
               <h3 className="text-white poppins-light">{subHeading}</h3>
             </div>

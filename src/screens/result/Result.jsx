@@ -69,14 +69,12 @@ function Result() {
   const handleUploadApi = async (formData, phnNo) => {
     try {
       const res = await UploadApi(eventID, formData);
-      if (
-        res.message == "File successfully uploaded" ||
-        res.message == "Mobile number already registered"
-      ) {
+      console.log("res::::",res)
+      if (res.message == "File successfully uploaded") {
         setWithExpiry("phnNo", phnNo, 86400000);
         fetchImages(phnNo);
-      } else {
-        navigate("/");
+      } else if (res.error == "Mobile number already registered") {
+        navigate("/register", { state: { userExist: true} });
       }
     } catch (error) {
       console.info(error);
