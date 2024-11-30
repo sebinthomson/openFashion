@@ -112,7 +112,7 @@ function Details() {
 
   useEffect(() => {
     if (eventID == null) navigate("/event-id");
-  }, [navigate, eventID]);
+  }, [eventID]);
 
   const handleAccept = () => {
     navigate("/gallery");
