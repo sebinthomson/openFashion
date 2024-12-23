@@ -3,11 +3,6 @@ import Carousel from "../../components/carousel/Carousel";
 import Footer from "../../components/footer/Footer";
 import Navbar from "../../components/navbar/Navbar";
 import { useContext, useEffect, useState } from "react";
-import {
-  config_heading,
-  config_subheading,
-  config_description,
-} from "../../../config";
 import { useGoogleLogin } from "@react-oauth/google";
 import { DetailsContext } from "../../contexts/DetailsContext";
 import RegistrationDetailsApi from "../../api/registrationDetails/RegistrationDetails";
@@ -18,9 +13,11 @@ import GetEventDetails from "../../api/getEventDetails/GetEventDetails";
 function Home() {
   const { setFName, setLName, setEmail, setIsRegistered, setPhnNo } =
     useContext(DetailsContext);
-  const [heading, setHeading] = useState(["A Celebration of Love"]);
-  const [subHeading, setSubHeading] = useState(config_subheading);
-  const [description, setDescription] = useState(config_description);
+  const [heading, setHeading] = useState(["loading... "]);
+  const [subHeading, setSubHeading] = useState("loading...");
+  const [description, setDescription] = useState("loading...");
+  const [eventName, setEventName] = useState("loading...");
+  const [eventDate, setEventDate] = useState("loading...");
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -90,10 +87,12 @@ function Home() {
 
   const fetchEvent = async (port) => {
     const eventDetails = await GetEventDetails(port);
-    setHeading(splitHeading(eventDetails.main_heading, 21));
+    setHeading(splitHeading(eventDetails.main_heading, 30));
     setSubHeading(eventDetails.subheading);
     setDescription(eventDetails.description);
     setImages([eventDetails.cover_image]);
+    setEventName(eventDetails.event_name);
+    setEventDate(eventDetails.event_date);
   };
 
   const fetchEventDetails = async (port) => {
@@ -131,22 +130,35 @@ function Home() {
         <></>
       ) : (
         <>
-          <Carousel images={images} />
+          <Carousel
+            images={images}
+            eventName={eventName}
+            eventDate={eventDate}
+          />
           <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
             <div className="d-flex flex-column flex-md-row">
               {heading.length &&
                 heading.map((head, index) => (
-                  <h1
+                  <h3
                     key={index}
-                    className={`text-white miama-font ${
+                    className={`text-white poppins-light ${
                       index === 0 ? "" : "pt-2"
                     }`}
                   >
                     {head}
-                  </h1>
+                  </h3>
                 ))}
             </div>
-
+            <div className="pt-2">
+              <h3 className="text-white fw-bold text-center miama-font">
+                {eventName}
+              </h3>
+            </div>{" "}
+            <div className="pt-2">
+              <h3 className="text-white fw-bold text-center miama-font">
+                {eventDate}
+              </h3>
+            </div>
             <div className="pt-2">
               <h3 className="text-white poppins-light">{subHeading}</h3>
             </div>
@@ -155,19 +167,19 @@ function Home() {
                 {description}{" "}
               </h6>
             </div>
-            <div className="py-3">
+            <div className="py-3 d-flex justify-content-around">
               <button
                 className="bg-white py-3 px-5 text-black border poppins-light rounded-0"
                 onClick={handleRegister}
               >
-                Register for images
+                Register For Your Photos
               </button>
             </div>
             {error && <div className="text-danger">{error}</div>}
           </div>
         </>
       )}
-      <Footer loader={loading} />
+      <Footer loader={loading} showBgBlack={false} />
     </div>
   );
 }

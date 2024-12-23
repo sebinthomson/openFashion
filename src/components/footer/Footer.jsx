@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Loader from "../loader/Loader";
 
-function Footer({ loader = false }) {
+function Footer({ loader = false, showBgBlack = true }) {
   const [balanceHeight, setBalanceHeight] = useState(0);
   const balanceRef = useRef(0);
   useEffect(() => {
@@ -17,27 +17,30 @@ function Footer({ loader = false }) {
 
   return (
     <>
-      <div className="bg-black " style={{ height: balanceHeight }}>
-        {/* {loader?<Loader/>:<></>} */}
-      </div>
+      {showBgBlack ? (
+        <div className="bg-black " style={{ height: balanceHeight }}></div>
+      ) : (
+        <></>
+      )}
+      {loader ? <Loader /> : <></>}
       <div className="footer-content row w-100 bg-dark pt-4 m-0">
         <div>
           <div>
-            <h3 className="text-white miama-font">Get In Touch With US!</h3>
+            <h4 className="text-white poppins-light">Your Feedback Matters!</h4>
           </div>
           <div>
             <h3 className="text-white poppins-extralight fs-6 pt-3">
-              www.openFashion.com
+              www.zyncion.com
             </h3>
           </div>
           <div>
             <h3 className="text-white poppins-extralight fs-6 pt-2">
-              openFashion@gmail.com
+              info@zyncion.com
             </h3>
           </div>
           <div>
             <h3 className="text-white poppins-extralight fs-6 pt-2">
-              91+ 9482 9484 90
+              +91-8891 000 325
             </h3>
           </div>
           <div className="d-flex gap-3 py-2 flex-row">
@@ -80,12 +83,12 @@ function Footer({ loader = false }) {
           </div>
         </div>
         <div>
-          <h3 className="text-white pt-2 powered-by">Powered By OpenFashion</h3>
+          <h3 className="text-white pt-2 powered-by">Powered By Zyncion Pvt LTD</h3>
         </div>
       </div>
-      <div className="row w-100 bg-black ps-4 py-2 m-0 copyright-div">
+      <div className="row w-100 ps-4 py-2 m-0 copyright-div">
         <h6 className="text-white copyright-font text-center">
-          Copyright © openFashion All Rights Reserved.
+          Copyright © Zyncion All Rights Reserved.
         </h6>
       </div>
     </>

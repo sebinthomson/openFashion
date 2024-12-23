@@ -2,7 +2,10 @@ import React, { useEffect } from "react";
 import "./carousel.css";
 import { Carousel } from "bootstrap";
 
-function CarouselComponent({ images }) {
+function CarouselComponent({
+  images,
+
+}) {
   useEffect(() => {
     const carouselElement = document.getElementById("carouselExampleInterval");
     const carousel = new Carousel(carouselElement, {
@@ -16,7 +19,7 @@ function CarouselComponent({ images }) {
       id="carouselExampleInterval"
       className="carousel slide bg-black"
       data-bs-ride="carousel"
-      data-bs-interval="1500" // Set the interval to 1.5 seconds here
+      data-bs-interval="1500" 
       style={{ margin: 0, padding: 0 }}
     >
       <div className="carousel-inner">
@@ -33,6 +36,12 @@ function CarouselComponent({ images }) {
           </div>
         ))}
       </div>
+      {/* {eventName && (
+        <div className="carousel-caption d-flex flex-column justify-content-center align-items-center">
+          <h5 className="text-white">{eventName}</h5>
+          <h5 className="text-white">{eventDate}</h5>
+        </div>
+      )} */}
       {images?.length > 1 ? (
         <div className="d-flex justify-content-center">
           <button

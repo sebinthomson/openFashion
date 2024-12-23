@@ -100,7 +100,7 @@ function PortNumber() {
           )}
         </div>
       </div>
-      <Footer />
+      <Footer showBgBlack={true} />
     </div>
   );
 }

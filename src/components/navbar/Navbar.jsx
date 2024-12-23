@@ -29,7 +29,11 @@ function Navbar({ showLogout = false }) {
     <nav className="navbar navbar-expand-lg bg-black header">
       <div className="container-fluid d-flex justify-content-between align-items-center">
         <div>
-          <img className="navbar-logo" src="/logo-tp.png" alt="Logo" />
+          <img
+            className="navbar-logo ps-3"
+            src="https://eagletestbucket12345.s3.us-east-1.amazonaws.com/EagleAI-logo.png"
+            alt="Logo"
+          />
         </div>
         {showLogout ? (
           <div className="pe-2">

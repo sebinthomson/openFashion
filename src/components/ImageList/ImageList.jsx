@@ -1,5 +1,5 @@
 import "./imageList.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -9,8 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
 import { DetailsContext } from "../../contexts/DetailsContext";
+import { DownloadOutlined } from "@mui/icons-material";
 
 function srcset(image, size) {
   return {
@@ -24,7 +24,7 @@ export default function CustomImageList({
   setSelectedImagesIndex,
   detectedImages,
   setDetectedImages,
-  setLoading,
+  downloadImage,
 }) {
   const { phnNo } = useContext(DetailsContext);
   const theme = useTheme();
@@ -49,13 +49,17 @@ export default function CustomImageList({
 
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   const handleOpen = (img) => {
     setSelectedImage(img);
     setOpen(true);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setIsImageLoaded(false);
+  };
 
   const handleSelectImage = (i) => {
     setSelectedImagesIndex((prev) => {
@@ -131,7 +135,7 @@ export default function CustomImageList({
             maxWidth: "90vw",
             maxHeight: "90vh",
             overflow: "hidden",
-            backgroundColor: "black",
+            backgroundColor: "transparent",
             borderRadius: "8px",
           }}
         >
@@ -141,6 +145,7 @@ export default function CustomImageList({
               top: 16,
               right: 16,
               color: "white",
+              zIndex: 1000,
             }}
             onClick={handleClose}
           >
@@ -161,7 +166,36 @@ export default function CustomImageList({
                   ? "scale(1)"
                   : "scale(2)")
             }
+            onLoad={() => {
+              setIsImageLoaded(true);
+            }}
           />
+          {/* {isImageLoaded ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <IconButton
+                sx={{
+                  position: "static",
+                  bottom: -40,
+                  color: "white",
+                  backgroundColor: "",
+                  zIndex: 1000,
+                }}
+                onClick={handleClose}
+              >
+                <div className="d-flex bg-black px-2 py-1 rounded" onClick={()=>{downloadImage(selectedImage,"img")}}>
+                  <DownloadOutlined />
+                  <span className="fs-6">Download</span>
+                </div>
+              </IconButton>
+            </Box>
+          ) : (
+            <></>
+          )} */}
         </Box>
       </Modal>
     </>

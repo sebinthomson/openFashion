@@ -34,31 +34,31 @@ function Details() {
 
   const handleInput = (key, e) => {
     const value = e.target.value;
-    if (key === "fName") {
-      setFName(value);
-      if (!value) {
-        setErrors((prev) => ({ ...prev, fName: "First name is required" }));
-      } else {
-        setErrors((prev) => ({ ...prev, fName: "" }));
-      }
-    }
-    if (key === "lName") {
-      setLName(value);
-      if (!value) {
-        setErrors((prev) => ({ ...prev, lName: "Last name is required" }));
-      } else {
-        setErrors((prev) => ({ ...prev, lName: "" }));
-      }
-    }
-    if (key === "email") {
-      setEmail(value);
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        setErrors((prev) => ({ ...prev, email: "Invalid email address" }));
-      } else {
-        setErrors((prev) => ({ ...prev, email: "" }));
-      }
-    }
+    // if (key === "lName") {
+    //   setLName(value);
+    //   if (!value) {
+    //     setErrors((prev) => ({ ...prev, lName: "Last name is required" }));
+    //   } else {
+    //     setErrors((prev) => ({ ...prev, lName: "" }));
+    //   }
+    // }
+    // if (key === "fName") {
+    //   setFName(value);
+    //   if (!value) {
+    //     setErrors((prev) => ({ ...prev, fName: "First name is required" }));
+    //   } else {
+    //     setErrors((prev) => ({ ...prev, fName: "" }));
+    //   }
+    // }
+    // if (key === "email") {
+    //   setEmail(value);
+    //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //   if (!emailRegex.test(value)) {
+    //     setErrors((prev) => ({ ...prev, email: "Invalid email address" }));
+    //   } else {
+    //     setErrors((prev) => ({ ...prev, email: "" }));
+    //   }
+    // }
     if (key === "phnNo") {
       setPhnNo(value);
       if (value.length == 0) {
@@ -88,7 +88,7 @@ function Details() {
     if (!lname) newErrors.lName = "Last name is required";
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) newErrors.email = "Invalid email address";
-    if (!img) newErrors.image = "Image not uploaded";
+    if (!img) newErrors.image = "Oops! Don't Forget to Upload Your Photo";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -101,7 +101,7 @@ function Details() {
       const file = fileInput.files[0];
       fileLabel.textContent = file.name;
       setImg(file);
-      setUploadMsg("Image uploaded");
+      setUploadMsg("All Set! Photo Is Ready to Upload");
       let newErrors = errors;
       if (newErrors.image) {
         newErrors.image = "";
@@ -115,8 +115,9 @@ function Details() {
 
   useEffect(() => {
     if (eventID == null) navigate("/event-id");
-    if (userExist){
-      setErrors({phnNo:"Mobile Number already exists"})
+    if (fname == "") navigate("/");
+    if (userExist) {
+      setErrors({ phnNo: "Mobile Number already exists" });
     }
   }, [eventID]);
 
@@ -134,11 +135,11 @@ function Details() {
       <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
         <Back page={"/"} />
         <div className="pt-4">
-          <h3 className="text-white miama-font fs-1">Fill the details</h3>
+          <h3 className="text-white miama-font fs-1">Let's Get You Started!</h3>
         </div>
         <div>
           <h6 className="text-white poppins-light lh-base">
-            One step You are almost there.....
+            Almost Done - Fill in the Gaps!
           </h6>
         </div>
         <div className="pt-3">
@@ -148,7 +149,7 @@ function Details() {
               errors.fName ? "is-invalid" : ""
             } disabled-input`}
             placeholder="First Name"
-            onChange={(e) => handleInput("fName", e)}
+            // onChange={(e) => handleInput("fName", e)}
             value={fname}
             disabled={true}
           />
@@ -161,7 +162,7 @@ function Details() {
               errors.lName ? "is-invalid" : ""
             } disabled-input`}
             placeholder="Last Name"
-            onChange={(e) => handleInput("lName", e)}
+            // onChange={(e) => handleInput("lName", e)}
             value={lname}
             disabled={true}
           />
@@ -174,7 +175,7 @@ function Details() {
               errors.email ? "is-invalid" : ""
             } disabled-input`}
             placeholder="Email"
-            onChange={(e) => handleInput("email", e)}
+            // onChange={(e) => handleInput("email", e)}
             value={email}
             readOnly
             disabled={true}
@@ -235,7 +236,7 @@ function Details() {
               accept=".jpg, .jpeg"
               onChange={updateFileName}
             />
-            <span id="fileLabel">Attach your file here</span>
+            <span id="fileLabel">Upload Your Photo</span>
           </label>
           {errors.image && <div className="text-danger">{errors.image}</div>}
           {uploadMsg.length ? (
