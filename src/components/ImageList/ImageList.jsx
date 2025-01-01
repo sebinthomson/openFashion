@@ -170,7 +170,7 @@ export default function CustomImageList({
               setIsImageLoaded(true);
             }}
           />
-          {/* {isImageLoaded ? (
+          {isImageLoaded ? (
             <Box
               sx={{
                 display: "flex",
@@ -195,7 +195,7 @@ export default function CustomImageList({
             </Box>
           ) : (
             <></>
-          )} */}
+          )}
         </Box>
       </Modal>
     </>

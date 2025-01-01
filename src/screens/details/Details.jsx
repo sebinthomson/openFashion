@@ -18,9 +18,6 @@ function Details() {
     setPhnNoCC,
     setPhnNo,
     setImg,
-    setFName,
-    setLName,
-    setEmail,
   } = useContext(DetailsContext);
   const [errors, setErrors] = useState({});
   const [uploadMsg, setUploadMsg] = useState("");
@@ -118,6 +115,12 @@ function Details() {
     if (fname == "") navigate("/");
     if (userExist) {
       setErrors({ phnNo: "Mobile Number already exists" });
+    }
+    console.log(img)
+    if (img){
+      setUploadMsg("All Set! Photo Is Ready to Upload")
+      const fileLabel = document.getElementById("fileLabel")
+      fileLabel.textContent = img?.name
     }
   }, [eventID]);
 
