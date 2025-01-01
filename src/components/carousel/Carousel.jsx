@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import "./carousel.css"; // Ensure this file contains the necessary styles for custom positioning
+import "./carousel.css";
+import { Carousel } from "bootstrap";
 
-function Carousel() {
+function CarouselComponent() {
   const images = [
     "/images/1.jpg",
     "/images/2.jpg",
@@ -10,9 +11,11 @@ function Carousel() {
   ];
 
   useEffect(() => {
-    const interval = setInterval(() => {}, 2000);
-
-    return () => clearInterval(interval);
+    const carouselElement = document.getElementById("carouselExampleInterval");
+    const carousel = new Carousel(carouselElement, {
+      interval: 1500,
+      ride: "carousel",
+    });
   }, []);
 
   return (
@@ -20,6 +23,7 @@ function Carousel() {
       id="carouselExampleInterval"
       className="carousel slide bg-black"
       data-bs-ride="carousel"
+      data-bs-interval="1500" // Set the interval to 1.5 seconds here
       style={{ margin: 0, padding: 0 }}
     >
       <div className="carousel-inner">
@@ -27,7 +31,6 @@ function Carousel() {
           <div
             key={index}
             className={`carousel-item ${index === 0 ? "active" : ""}`}
-            data-bs-interval="2000"
           >
             <img
               src={src}
@@ -59,4 +62,4 @@ function Carousel() {
   );
 }
 
-export default Carousel;
+export default CarouselComponent;

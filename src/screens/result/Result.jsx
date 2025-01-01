@@ -1,45 +1,183 @@
-import Back from "../../components/back/Back";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/footer/Footer";
 import CustomImageList from "../../components/ImageList/ImageList";
 import Navbar from "../../components/navbar/Navbar";
+import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
+import UploadApi from "../../api/upload/Upload";
+import { getWithExpiry, setWithExpiry } from "../../utils/localstorage";
 import { Modal } from "bootstrap";
+import axios from "axios";
+import { DetailsContext } from "../../contexts/DetailsContext";
+import { useNavigate } from "react-router-dom";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 function Result() {
-  const handleDownload = () => {
-    const modalElement = document.getElementById("staticBackdrop");
-    const modal = new Modal(modalElement);
-    modal.show();
+  const { fname, lname, isRegistered, phnNo, email, img } =
+    useContext(DetailsContext);
+  const [selectedImagesIndex, setSelectedImagesIndex] = useState([]);
+  const [detectedImages, setDetectedImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(true);
+  const navigate = useNavigate();
+  const eventID = getWithExpiry("eventID");
+
+  const handleDownload = async () => {
+    try {
+      setDownloadLoading(true);
+
+      const modalElement = document.getElementById("staticBackdrop");
+      const modal = new Modal(modalElement);
+      modal.show();
+
+      const zip = new JSZip();
+      for (let index = 0; index < selectedImagesIndex.length; index++) {
+        const imageUrl = selectedImagesIndex[index];
+        const response = await axios.get(imageUrl, {
+          responseType: "blob",
+        });
+
+        const imageBlob = new Blob([response.data]);
+        zip.file(`image_${index + 1}.jpg`, imageBlob);
+      }
+
+      const content = await zip.generateAsync({ type: "blob" });
+
+      const name =
+        selectedImagesIndex?.[0]?.split("/")?.slice(-2, -1)?.[0] || "image";
+
+      if (isDownloading) {
+        saveAs(content, `${name}.zip`);
+      }
+
+      setDownloadLoading(false);
+      setIsDownloading(true);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const fetchImages = async (phnNo) => {
+    setLoading(true);
+    const res = await DetectedFaceApi(eventID, phnNo);
+    setDetectedImages(res);
+    setLoading(false);
+  };
+
+  const handleUploadApi = async (formData, phnNo) => {
+    try {
+      const res = await UploadApi(eventID, formData);
+      if (
+        res.message == "File successfully uploaded" ||
+        res.message == "Mobile number already registered"
+      ) {
+        setWithExpiry("phnNo", phnNo, 86400000);
+        fetchImages(phnNo);
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.info(error);
+    }
+  };
+
+  const handleCancelDownload = () => {
+    if (downloadLoading) setIsDownloading(false);
+  };
+
+  useEffect(() => {
+    if (eventID != null) {
+      if (isRegistered == false || isRegistered == true) {
+        if (!isRegistered) {
+          if (fname && lname && email && img && phnNo) {
+            const formData = new FormData();
+            formData.append("firstName", fname);
+            formData.append("lastName", lname);
+            formData.append("mobileNumber", phnNo);
+            formData.append("email", email);
+            formData.append("imageFile", img);
+            handleUploadApi(formData, phnNo);
+          }
+        } else {
+          if (phnNo) {
+            setWithExpiry("phnNo", phnNo, 86400000);
+            fetchImages(phnNo);
+          }
+        }
+      } else {
+        const phnNoLS = getWithExpiry("phnNo");
+        if (phnNoLS != null) {
+          fetchImages(phnNoLS);
+        } else {
+          navigate("/");
+        }
+      }
+    } else {
+      navigate("/event-id");
+    }
+  }, [phnNo]);
+
   return (
-    <div className="row full-height">
-      <Navbar />
-      <div
-        className="row w-100 bg-black px-3 py-4 gap-2 m-0"
-        style={{ maxWidth: "100vw" }}
-      >
-        <Back />
-        <div className="pt-4 d-flex justify-content-between ">
-          <div>
-            <h3 className="text-white miama-font fs-1">Your result</h3>
-          </div>
-          <div>
-            <select name="" id="" className="py-2 px-1 poppins-light">
-              <option value="">individuals</option>
-              <option value="">group</option>
-            </select>
-          </div>
-        </div>
-        <div className="pt-4 height-auto">
-          <CustomImageList />
-        </div>
-        <div className="py-3 d-flex justify-content-center">
-          <button
-            className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
-            onClick={handleDownload}
-          >
-            Download
-          </button>
-        </div>
+    <div className="row full-height" id="belowroot">
+      <Navbar showLogout={true} />
+      <div className="row w-100 bg-black px-3 py-4 gap-2 m-0">
+        {loading ? (
+          <>
+            <div className="pt-4">
+              <h3 className="text-white miama-font fs-1">Searching......</h3>
+            </div>
+            <div>
+              <h6 className="text-white poppins-light lh-base">
+                Fetching Your Result
+              </h6>
+            </div>
+            <div className="ps-2"> </div>
+            <div className="container">
+              <div className="loadingspinner">
+                <div id="square1"></div>
+                <div id="square2"></div>
+                <div id="square3"></div>
+                <div id="square4"></div>
+                <div id="square5"></div>
+              </div>
+            </div>
+            <div className="bg-black" style={{ height: "45px" }}></div>
+          </>
+        ) : (
+          <>
+            <div className="pt-4 d-flex justify-content-between ">
+              <div>
+                <h3 className="text-white miama-font fs-1">Your result</h3>
+              </div>
+              <div>
+                <select name="" id="" className="py-2 px-1 poppins-light">
+                  <option value="">individuals</option>
+                  <option value="">group</option>
+                </select>
+              </div>
+            </div>
+            <div className="pt-4 height-auto">
+              <CustomImageList
+                selectedImagesIndex={selectedImagesIndex}
+                detectedImages={detectedImages}
+                setSelectedImagesIndex={setSelectedImagesIndex}
+                setDetectedImages={setDetectedImages}
+                setLoading={setLoading}
+              />
+            </div>
+            <div className="py-3 d-flex justify-content-center">
+              {selectedImagesIndex.length != 0 && (
+                <button
+                  className="bg-white  px-5 py-3 text-black border  poppins-light rounded-0"
+                  onClick={handleDownload}
+                >
+                  Download
+                </button>
+              )}
+            </div>
+          </>
+        )}
       </div>
       <div
         className="modal fade"
@@ -86,16 +224,55 @@ function Result() {
               </div>
               <div>
                 <h3 className="text-center text-black miama-font fs-4">
-                  Download Successful
+                  {downloadLoading ? "Downloading" : "Download Successful"}
                 </h3>
               </div>
+              {downloadLoading ? (
+                <div className="d-flex justify-content-center">
+                  <div>
+                    <div className="spinner-border" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    {/* <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div
+                      className="spinner-grow spinner-grow-sm me-2"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div> */}
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="py-3 d-flex justify-content-center">
-                <button
-                  className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
-                  data-bs-dismiss="modal"
-                >
-                  Done
-                </button>
+                {downloadLoading ? (
+                  <button
+                    className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
+                    onClick={handleCancelDownload}
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                ) : (
+                  <button
+                    className="bg-black text-white px-5 py-2 text-black border poppins-light rounded-0"
+                    data-bs-dismiss="modal"
+                  >
+                    Done
+                  </button>
+                )}
               </div>
             </div>
           </div>

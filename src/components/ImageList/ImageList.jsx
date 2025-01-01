@@ -1,6 +1,5 @@
-import { itemData } from "../../../public/gallery";
 import "./imageList.css";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
@@ -10,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+import DetectedFaceApi from "../../api/detectedFace/DetectedFace";
+import { DetailsContext } from "../../contexts/DetailsContext";
 
 function srcset(image, size) {
   return {
@@ -18,7 +19,14 @@ function srcset(image, size) {
   };
 }
 
-export default function CustomImageList() {
+export default function CustomImageList({
+  selectedImagesIndex,
+  setSelectedImagesIndex,
+  detectedImages,
+  setDetectedImages,
+  setLoading,
+}) {
+  const { phnNo } = useContext(DetailsContext);
   const theme = useTheme();
 
   const isExtraSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,33 +57,60 @@ export default function CustomImageList() {
 
   const handleClose = () => setOpen(false);
 
+  const handleSelectImage = (i) => {
+    setSelectedImagesIndex((prev) => {
+      let imageUrl = detectedImages[i]?.image_url;
+      let newSelectedImages = [...prev];
+      const indexOfI = newSelectedImages.indexOf(imageUrl);
+      if (indexOfI !== -1) {
+        newSelectedImages.splice(indexOfI, 1);
+      } else {
+        newSelectedImages.push(imageUrl);
+      }
+      return newSelectedImages;
+    });
+  };
+
   return (
     <>
       <div className="image-list-container" style={{ height: height }}>
         <ImageList rowHeight={200} gap={14} cols={cols}>
-          {itemData.map((item) => (
-            <ImageListItem key={item.img}>
-              <img
-                {...srcset(item.img, 200)}
-                alt={item.title}
-                loading="lazy"
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                onClick={() => handleOpen(item.img)}
-              />
-              <ImageListItemBar
-                sx={{
-                  background:
-                    "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                    "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                }}
-                position="top"
-                actionIcon={
-                  <input className="custom-checkbox m-2" type="checkbox" />
-                }
-                actionPosition="left"
-              />
-            </ImageListItem>
-          ))}
+          {Array.isArray(detectedImages) &&
+            detectedImages.map((item, i) => {
+              return (
+                <ImageListItem key={item.image_url}>
+                  <img
+                    {...srcset(item.image_url, 200)}
+                    alt={item.title}
+                    loading="lazy"
+                    style={{
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    onClick={() => handleOpen(item.image_url)}
+                  />
+                  <ImageListItemBar
+                    sx={{
+                      background:
+                        "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
+                        "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                    }}
+                    position="top"
+                    actionIcon={
+                      <input
+                        className="custom-checkbox m-2"
+                        type="checkbox"
+                        onChange={() => {
+                          handleSelectImage(i);
+                        }}
+                      />
+                    }
+                    actionPosition="left"
+                  />
+                </ImageListItem>
+              );
+            })}
         </ImageList>
       </div>
 
