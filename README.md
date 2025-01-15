@@ -54,16 +54,12 @@ npm run preview
 
 #### Deployment Workflow
 
-#### Prerequisite Setup
-1. Clone the repository on the deployment server.
-```bash
-git clone <repository-url>
 ```
-2. Update the system package index.
+1. Update the system package index.
 ```bash
 sudo apt update
 ```
-3. Install Nginx.
+2. Install Nginx.
 ```bash
 sudo apt install nginx
 ```
@@ -106,10 +102,11 @@ Navigate your terminal to the directory where your pem file is located, Use the 
 sudo ssh -i "frontendUbuntu20.pem" ubuntu@ec2-3-210-33-63.compute-1.amazonaws.com
 ```
 
-#### 2. Pull the Latest Changes
-Navigate to the project directory on the server and pull the latest updates:
+#### 2. Copy your changes
+Consider openFashionDist as your project folder and path is like /home/ubuntu/openFashionDist.
+In your local with the pem file in the project folder and after navigation to the project folder you can copy changes to the EC2.
 ```bash
-git pull
+scp -r -i frontendUbuntu20.pem dist/* ubuntu@ec2-3-210-33-63.compute-1.amazonaws.com:/home/ubuntu/openFashionDist
 ```
 
 #### 3. Copy files to /var/www/html/ as configured in nginx
